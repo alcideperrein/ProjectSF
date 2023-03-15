@@ -3,4 +3,5 @@ char main(){
     int bla;
     int ab;
     int ba;
+    int abc;
 }
