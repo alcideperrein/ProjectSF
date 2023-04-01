@@ -1,10 +1,15 @@
 #include"structure.h"
+#include "deplacement.c"
+#include<stdio.h>
 
 int main()
 {
-    struct Coordonees point;
+    int i=0;
+    Coordonees point;
     point.x=0;
-    point.y=0;
+    gauche(&point);
+    printf("%d",point.x);
+
 
     return 0;
 }
