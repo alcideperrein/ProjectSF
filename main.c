@@ -29,6 +29,8 @@ void haut(Coordonees* point)
     (*point).y = 0;
 }
 
+
+
 int main(int argc, char **argv) {
     Coordonees point;
     SDL_Window* pwindow;
@@ -36,6 +38,7 @@ int main(int argc, char **argv) {
     SDL_Event touche;
     SDL_Rect rectangle;
     int jeu = 0;
+    int temps = 1;
 
     SDL_Init(SDL_INIT_VIDEO);
     SDL_version nb;
@@ -49,9 +52,9 @@ int main(int argc, char **argv) {
 
     renderer = SDL_CreateRenderer(pwindow, -1, SDL_RENDERER_SOFTWARE);
 
-    rectangle.x =20;
+    rectangle.x = 20;
     rectangle.y = 500;
-    rectangle.h = 480;
+    rectangle.h = 500;
     rectangle.w = 220;
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
     SDL_RenderDrawRect(renderer,&rectangle);
@@ -64,31 +67,76 @@ int main(int argc, char **argv) {
         switch (touche.type)
         {
             case SDL_KEYUP:
-                if (touche.key.keysym.sym == SDLK_ESCAPE)// Regarde si == touche ESC
-                {
-                    SDL_DestroyRenderer(renderer);
-                    SDL_DestroyWindow(pwindow); // Detruit la fenetre
-                    jeu = 1;
+                switch (touche.key.keysym.sym)
+                { 
+                    case SDLK_ESCAPE:// Regarde si == touche ESC
+                        SDL_DestroyRenderer(renderer);
+                        SDL_DestroyWindow(pwindow); // Detruit la fenetre
+                        jeu = 1;
+                        break;
+
+                    case SDLK_s:
+                        rectangle.y = 500;
+                        rectangle.h = 500;
+                        temps = 1;
+                        SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+                        SDL_RenderClear(renderer);
+                        SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+                        SDL_RenderDrawRect(renderer, &rectangle);
+                        SDL_RenderPresent(renderer);
+                        break;
+
                 }
                 break;
+
             case SDL_KEYDOWN:
-                if (touche.key.keysym.sym == SDLK_d)
+                switch (touche.key.keysym.sym)
                 {
-                    if (rectangle.x < 1680)
-                    {
-                        rectangle.x += 20;
-                    }
-                    SDL_RenderDrawRect(renderer, &rectangle);
-                    SDL_RenderPresent(renderer);
-                }
-                else if (touche.key.keysym.sym == SDLK_q)
-                {
-                    if (rectangle.x > 20)
-                    {
-                        rectangle.x -= 20;
-                    }
-                    SDL_RenderDrawRect(renderer, &rectangle);
-                    SDL_RenderPresent(renderer);
+                    case SDLK_d:
+                        if (rectangle.x < 1680 && temps == 1)
+                        {
+                            rectangle.x += 20;
+                        }
+                        else if (rectangle.x < 1680 && temps == 0)
+                        {
+                            rectangle.x += 5;
+                        }
+                        SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+                        SDL_RenderClear(renderer);
+                        SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+                        SDL_RenderDrawRect(renderer, &rectangle);
+                        SDL_RenderPresent(renderer);
+                        break;
+
+                    case SDLK_q:
+                       if (rectangle.x > 20 && temps==1)
+                        {
+                            rectangle.x -= 20;
+                        }
+                       else if (rectangle.x > 20 && temps == 0)
+                       {
+                           rectangle.x -= 5;
+                       }
+                        SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+                        SDL_RenderClear(renderer);
+                        SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+                        SDL_RenderDrawRect(renderer, &rectangle);
+                        SDL_RenderPresent(renderer);
+                        break;
+
+
+                    case SDLK_s:
+                        rectangle.y = 750;
+                        rectangle.h = 250;
+                        temps = 0;
+                        SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+                        SDL_RenderClear(renderer);
+                        SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+                        SDL_RenderDrawRect(renderer, &rectangle);
+                        SDL_RenderPresent(renderer);
+                        break;
+
+                        
                 }
         }
     }
