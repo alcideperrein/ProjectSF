@@ -63,7 +63,7 @@ int main(int argc, char **argv) {
     
     while (jeu==0) 
     {
-        /**/touche = SDL_GetKeyboardState(NULL);
+        touche = SDL_GetKeyboardState(NULL);
 
         if (touche[SDL_SCANCODE_D] && touche[SDL_SCANCODE_S]==0) {
             if (rectangle.x < 1680)
