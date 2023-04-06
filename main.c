@@ -5,29 +5,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void gauche(Coordonees* point)
-{
-    (*point).x = 1;
-    (*point).y = 0;
-}
-
-void droit(Coordonees* point)
-{
-    (*point).x = 0;
-    (*point).y = 0;
-}
-
-void bas(Coordonees* point)
-{
-    (*point).x = 0;
-    (*point).y = 0;
-}
-
-void haut(Coordonees* point)
-{
-    (*point).x = 0;
-    (*point).y = 0;
-}
 
 
 
@@ -39,6 +16,8 @@ int main(int argc, char **argv) {
     SDL_Rect rectangle;
     int jeu = 0;
     int temps = 1;
+    int saut=0;
+    int snick = 0;
 
     SDL_Init(SDL_INIT_VIDEO);
     SDL_version nb;
@@ -56,16 +35,16 @@ int main(int argc, char **argv) {
     rectangle.y = 500;
     rectangle.h = 500;
     rectangle.w = 220;
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
-    SDL_RenderDrawRect(renderer,&rectangle);
-    SDL_RenderPresent(renderer);
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);// choisis la coucleur 
+    SDL_RenderDrawRect(renderer,&rectangle);// fait un rectangle
+    SDL_RenderPresent(renderer);// met a jour le renderer
 
     
     while (jeu==0) 
     {
         touche = SDL_GetKeyboardState(NULL);
 
-        if (touche[SDL_SCANCODE_D] && touche[SDL_SCANCODE_S]==0) {
+        if (touche[SDL_SCANCODE_D] && snick == 0) {
             if (rectangle.x < 1680)
             {
                 rectangle.x += 1;
@@ -76,21 +55,58 @@ int main(int argc, char **argv) {
             SDL_RenderDrawRect(renderer, &rectangle);
             SDL_RenderPresent(renderer);
         }
-        if (touche[SDL_SCANCODE_A] && touche[SDL_SCANCODE_S]==0) {
+        if (touche[SDL_SCANCODE_A] && snick==0) {
 
                 if (rectangle.x > 20)
                 {
                     rectangle.x -= 1;
                 }
+
                 SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
                 SDL_RenderClear(renderer);
                 SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
                 SDL_RenderDrawRect(renderer, &rectangle);
                 SDL_RenderPresent(renderer);
             }
-        if (touche[SDL_SCANCODE_S]) {
+        if ((touche[SDL_SCANCODE_S]) && (saut==0)) {
             rectangle.y = 750;
             rectangle.h = 250;
+            snick = 1;
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+            SDL_RenderClear(renderer);
+            SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+            SDL_RenderDrawRect(renderer, &rectangle);
+            SDL_RenderPresent(renderer);
+        }
+        if ((touche[SDL_SCANCODE_W])&&(saut==0))
+        {
+            if (rectangle.y > 150) {
+                saut = 1;
+            }
+            else {
+                saut = 2;
+            }
+            
+           
+        }
+        if (saut == 1) {
+            if (rectangle.y < 150) {
+            saut = 2;
+            }
+            rectangle.y -= 2;
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+            SDL_RenderClear(renderer);
+            SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+            SDL_RenderDrawRect(renderer, &rectangle);
+            SDL_RenderPresent(renderer);
+        }
+        if (saut == 2) {
+            if (rectangle.y < 500) {
+                rectangle.y += 2;
+            }
+            else if (rectangle.y == 500) {
+                saut = 0;
+            }
             SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
             SDL_RenderClear(renderer);
             SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
@@ -98,16 +114,17 @@ int main(int argc, char **argv) {
             SDL_RenderPresent(renderer);
         }
 
-        if (touche[SDL_SCANCODE_S]==0) {
+        if ((touche[SDL_SCANCODE_S]==0) && (snick==1) && (saut==0)) {
             rectangle.y = 500;
             rectangle.h = 500;
+            snick = 0;
             SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
             SDL_RenderClear(renderer);
             SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
             SDL_RenderDrawRect(renderer, &rectangle);
             SDL_RenderPresent(renderer);
         }
-
+        
 
        SDL_PollEvent(&touche2);// Récupération des actions de l'utilisateur
         switch (touche2.type)
