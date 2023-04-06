@@ -44,7 +44,7 @@ int main(int argc, char **argv) {
     {
         touche = SDL_GetKeyboardState(NULL);
 
-        if (touche[SDL_SCANCODE_D] && snick == 0) {
+        if (touche[SDL_SCANCODE_D] && (snick == 0)) {
             if (rectangle.x < 1680)
             {
                 rectangle.x += 1;
@@ -55,7 +55,7 @@ int main(int argc, char **argv) {
             SDL_RenderDrawRect(renderer, &rectangle);
             SDL_RenderPresent(renderer);
         }
-        if (touche[SDL_SCANCODE_A] && snick==0) {
+        if (touche[SDL_SCANCODE_A] && (snick==0)) {
 
                 if (rectangle.x > 20)
                 {
