@@ -32,10 +32,10 @@ void haut(Coordonees* point)
 
 
 int main(int argc, char **argv) {
-    Coordonees point;
     SDL_Window* pwindow;
     SDL_Renderer* renderer;
-    SDL_Event touche;
+    Uint8 const* touche;
+    SDL_Event touche2;
     SDL_Rect rectangle;
     int jeu = 0;
     int temps = 1;
@@ -63,11 +63,57 @@ int main(int argc, char **argv) {
     
     while (jeu==0) 
     {
-        SDL_PollEvent(&touche);// Récupération des actions de l'utilisateur
-        switch (touche.type)
+        /**/touche = SDL_GetKeyboardState(NULL);
+
+        if (touche[SDL_SCANCODE_D] && touche[SDL_SCANCODE_S]==0) {
+            if (rectangle.x < 1680)
+            {
+                rectangle.x += 1;
+            }
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+            SDL_RenderClear(renderer);
+            SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+            SDL_RenderDrawRect(renderer, &rectangle);
+            SDL_RenderPresent(renderer);
+        }
+        if (touche[SDL_SCANCODE_A] && touche[SDL_SCANCODE_S]==0) {
+
+                if (rectangle.x > 20)
+                {
+                    rectangle.x -= 1;
+                }
+                SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+                SDL_RenderClear(renderer);
+                SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+                SDL_RenderDrawRect(renderer, &rectangle);
+                SDL_RenderPresent(renderer);
+            }
+        if (touche[SDL_SCANCODE_S]) {
+            rectangle.y = 750;
+            rectangle.h = 250;
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+            SDL_RenderClear(renderer);
+            SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+            SDL_RenderDrawRect(renderer, &rectangle);
+            SDL_RenderPresent(renderer);
+        }
+
+        if (touche[SDL_SCANCODE_S]==0) {
+            rectangle.y = 500;
+            rectangle.h = 500;
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+            SDL_RenderClear(renderer);
+            SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+            SDL_RenderDrawRect(renderer, &rectangle);
+            SDL_RenderPresent(renderer);
+        }
+
+
+       SDL_PollEvent(&touche2);// Récupération des actions de l'utilisateur
+        switch (touche2.type)
         {
             case SDL_KEYUP:
-                switch (touche.key.keysym.sym)
+                switch (touche2.key.keysym.sym)
                 { 
                     case SDLK_ESCAPE:// Regarde si == touche ESC
                         SDL_DestroyRenderer(renderer);
@@ -75,7 +121,7 @@ int main(int argc, char **argv) {
                         jeu = 1;
                         break;
 
-                    case SDLK_s:
+                    /*case SDLK_s:
                         rectangle.y = 500;
                         rectangle.h = 500;
                         temps = 1;
@@ -84,10 +130,11 @@ int main(int argc, char **argv) {
                         SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
                         SDL_RenderDrawRect(renderer, &rectangle);
                         SDL_RenderPresent(renderer);
-                        break;
+                        break;*/
 
                 }
                 break;
+                /*
 
             case SDL_KEYDOWN:
                 switch (touche.key.keysym.sym)
@@ -137,14 +184,12 @@ int main(int argc, char **argv) {
                         break;
 
                         
-                }
-        }
+                }*/
+        } 
     }
-
-
     
 
-    printf("bienvenue sur la sdl %d.%d.%d !\n", nb.major, nb.minor, nb.patch);
+    //printf("bienvenue sur la sdl %d.%d.%d !\n", nb.major, nb.minor, nb.patch);
 
 
 
@@ -154,3 +199,8 @@ int main(int argc, char **argv) {
 
 
 
+/* modifier pour les touches 
+liens:
+https://wiki.libsdl.org/SDL2/SDL_GetKeyboardState
+https://wiki.libsdl.org/SDL2/SDL_Scancode
+*/
