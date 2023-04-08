@@ -51,18 +51,30 @@ int main(int argc, char** argv) {
         touche = SDL_GetKeyboardState(NULL);
 
 
-        if (touche[SDL_SCANCODE_D] && (snick == 0)) {
+        if (touche[SDL_SCANCODE_D]) {
             if (rectangle.x < 1680)
             {
-                rectangle.x += 2;
+                if (snick == 0) {
+                    rectangle.x += 2;
+                }
+                else {
+                    rectangle.x += 1;
+                }
+                
             }
         }
 
-        if (touche[SDL_SCANCODE_A] && (snick == 0)) {
+        if (touche[SDL_SCANCODE_A] ) {
 
             if (rectangle.x > 20)
             {
-                rectangle.x -= 2;
+                if (snick == 0) {
+                    rectangle.x -= 2;
+                }
+                else {
+                    rectangle.x -= 1;
+                }
+                
             }
 
         }
