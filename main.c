@@ -12,6 +12,9 @@ int main(int argc, char** argv) {
     Uint8 const* touche;
     SDL_Event touche2;
     SDL_Rect rectangle;
+    SDL_Rect rectangleWind;
+    SDL_Surface* fond;
+    SDL_Texture* texture;
     int jeu = 0;
     int temps = 1;
     int saut = 0;
@@ -29,13 +32,22 @@ int main(int argc, char** argv) {
 
     renderer = SDL_CreateRenderer(pwindow, -1, SDL_RENDERER_SOFTWARE);
 
+    fond = SDL_LoadBMP("C:/Users/Public/SFBackground.bmp");//recupere image de fond
+    texture = SDL_CreateTextureFromSurface(renderer, fond);
+    rectangleWind.x = 0;
+    rectangleWind.y = 0;
+    
+    SDL_RenderCopy(renderer, texture, NULL, NULL);
+    SDL_RenderPresent(renderer);// met a jour le renderer
+
     rectangle.x = 20;
     rectangle.y = 500;
     rectangle.h = 500;
     rectangle.w = 220;
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);// choisis la coucleur 
+    SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);// choisis la coucleur 
     SDL_RenderDrawRect(renderer, &rectangle);// fait un rectangle
     SDL_RenderPresent(renderer);// met a jour le renderer
+    
 
 
     while (jeu == 0)
@@ -49,7 +61,8 @@ int main(int argc, char** argv) {
             }
             SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
             SDL_RenderClear(renderer);
-            SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+            SDL_RenderCopy(renderer, texture, NULL, NULL);
+            SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);
             SDL_RenderDrawRect(renderer, &rectangle);
             SDL_RenderPresent(renderer);
         }
@@ -62,7 +75,8 @@ int main(int argc, char** argv) {
 
             SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
             SDL_RenderClear(renderer);
-            SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+            SDL_RenderCopy(renderer, texture, NULL, NULL);
+            SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);
             SDL_RenderDrawRect(renderer, &rectangle);
             SDL_RenderPresent(renderer);
         }
@@ -72,7 +86,8 @@ int main(int argc, char** argv) {
             snick = 1;
             SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
             SDL_RenderClear(renderer);
-            SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+            SDL_RenderCopy(renderer, texture, NULL, NULL);
+            SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);
             SDL_RenderDrawRect(renderer, &rectangle);
             SDL_RenderPresent(renderer);
         }
@@ -93,7 +108,8 @@ int main(int argc, char** argv) {
             rectangle.y -= 2;
             SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
             SDL_RenderClear(renderer);
-            SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+            SDL_RenderCopy(renderer, texture, NULL, NULL);
+            SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);
             SDL_RenderDrawRect(renderer, &rectangle);
             SDL_RenderPresent(renderer);
         }
@@ -106,7 +122,8 @@ int main(int argc, char** argv) {
             }
             SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
             SDL_RenderClear(renderer);
-            SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+            SDL_RenderCopy(renderer, texture, NULL, NULL);
+            SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);
             SDL_RenderDrawRect(renderer, &rectangle);
             SDL_RenderPresent(renderer);
         }
@@ -117,12 +134,13 @@ int main(int argc, char** argv) {
             snick = 0;
             SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
             SDL_RenderClear(renderer);
-            SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+            SDL_RenderCopy(renderer, texture, NULL, NULL);
+            SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);
             SDL_RenderDrawRect(renderer, &rectangle);
             SDL_RenderPresent(renderer);
         }
 
-
+        
         SDL_PollEvent(&touche2);// Récupération des actions de l'utilisateur
         switch (touche2.type)
         {
@@ -146,8 +164,8 @@ int main(int argc, char** argv) {
                     SDL_RenderPresent(renderer);
                     break;*/
 
-            }
-            break;
+           }
+           break;
             /*
         case SDL_KEYDOWN:
             switch (touche.key.keysym.sym)
@@ -212,3 +230,4 @@ int main(int argc, char** argv) {
 liens:
 https://wiki.libsdl.org/SDL2/SDL_GetKeyboardState
 https://wiki.libsdl.org/SDL2/SDL_Scancode
+*/
