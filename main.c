@@ -165,8 +165,8 @@ int main(int argc, char **argv) {
                     SDL_DestroyWindow(window);
                     SDL_ExitWithError("Impossible de charger la texture");
                 }
-                rectangleWind.x = (WINDOWS_WIDTH - rectangleWind.w);
-                rectangleWind.y = (WINDOWS_HEIGHT - rectangleWind.h);
+                rectangleWind.x = 0;
+                rectangleWind.y = 0;
 
                 if (SDL_RenderCopy(rendererWind, background,NULL, &rectangleWind) !=0)
                 {
@@ -257,4 +257,4 @@ https://wiki.libsdl.org/SDL2/SDL_Scancode
 
     //printf("bienvenue sur la sdl %d.%d.%d !\n", nb.major, nb.minor, nb.patch);
 
-    gcc 
+        
