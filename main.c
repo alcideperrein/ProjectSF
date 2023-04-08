@@ -3,8 +3,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
-
+void affichage(SDL_Texture* texture,SDL_Renderer* renderer,SDL_Rect* rectangle)
+{
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+    SDL_RenderClear(renderer);
+    SDL_RenderCopy(renderer, texture, NULL, NULL);
+    SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);
+    SDL_RenderDrawRect(renderer, rectangle);
+    SDL_RenderPresent(renderer);
+}
 
 int main(int argc, char** argv) {
     SDL_Window* pwindow;
@@ -34,8 +41,7 @@ int main(int argc, char** argv) {
 
     fond = SDL_LoadBMP("C:/Users/Public/SFBackground.bmp");//recupere image de fond
     texture = SDL_CreateTextureFromSurface(renderer, fond);
-    rectangleWind.x = 0;
-    rectangleWind.y = 0;
+    
     
     SDL_RenderCopy(renderer, texture, NULL, NULL);
     SDL_RenderPresent(renderer);// met a jour le renderer
@@ -59,12 +65,7 @@ int main(int argc, char** argv) {
             {
                 rectangle.x += 1;
             }
-            SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-            SDL_RenderClear(renderer);
-            SDL_RenderCopy(renderer, texture, NULL, NULL);
-            SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);
-            SDL_RenderDrawRect(renderer, &rectangle);
-            SDL_RenderPresent(renderer);
+            affichage(texture,renderer,&rectangle);
         }
         if (touche[SDL_SCANCODE_A] && (snick == 0)) {
 
@@ -73,23 +74,13 @@ int main(int argc, char** argv) {
                 rectangle.x -= 1;
             }
 
-            SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-            SDL_RenderClear(renderer);
-            SDL_RenderCopy(renderer, texture, NULL, NULL);
-            SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);
-            SDL_RenderDrawRect(renderer, &rectangle);
-            SDL_RenderPresent(renderer);
+            affichage(texture, renderer, &rectangle);
         }
         if ((touche[SDL_SCANCODE_S]) && (saut == 0)) {
             rectangle.y = 750;
             rectangle.h = 250;
             snick = 1;
-            SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-            SDL_RenderClear(renderer);
-            SDL_RenderCopy(renderer, texture, NULL, NULL);
-            SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);
-            SDL_RenderDrawRect(renderer, &rectangle);
-            SDL_RenderPresent(renderer);
+            affichage(texture, renderer, &rectangle);
         }
         if ((touche[SDL_SCANCODE_W]) && (saut == 0) && (snick == 0))
         {
@@ -106,12 +97,7 @@ int main(int argc, char** argv) {
                 saut = 2;
             }
             rectangle.y -= 2;
-            SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-            SDL_RenderClear(renderer);
-            SDL_RenderCopy(renderer, texture, NULL, NULL);
-            SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);
-            SDL_RenderDrawRect(renderer, &rectangle);
-            SDL_RenderPresent(renderer);
+            affichage(texture, renderer, &rectangle);
         }
         if (saut == 2) {
             if (rectangle.y < 500) {
@@ -120,24 +106,14 @@ int main(int argc, char** argv) {
             else if (rectangle.y == 500) {
                 saut = 0;
             }
-            SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-            SDL_RenderClear(renderer);
-            SDL_RenderCopy(renderer, texture, NULL, NULL);
-            SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);
-            SDL_RenderDrawRect(renderer, &rectangle);
-            SDL_RenderPresent(renderer);
+            affichage(texture, renderer, &rectangle);
         }
 
         if ((touche[SDL_SCANCODE_S] == 0) && (snick == 1) && (saut == 0)) {
             rectangle.y = 500;
             rectangle.h = 500;
             snick = 0;
-            SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-            SDL_RenderClear(renderer);
-            SDL_RenderCopy(renderer, texture, NULL, NULL);
-            SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);
-            SDL_RenderDrawRect(renderer, &rectangle);
-            SDL_RenderPresent(renderer);
+            affichage(texture, renderer, &rectangle);
         }
 
         
@@ -230,4 +206,12 @@ int main(int argc, char** argv) {
 liens:
 https://wiki.libsdl.org/SDL2/SDL_GetKeyboardState
 https://wiki.libsdl.org/SDL2/SDL_Scancode
+*/
+
+
+/*
+
+difficulté :
+
+
 */
