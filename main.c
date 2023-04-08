@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void affichage(SDL_Texture* texture,SDL_Renderer* renderer,SDL_Rect* rectangle)
+void affichage(SDL_Texture* texture, SDL_Renderer* renderer, SDL_Rect* rectangle)
 {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
     SDL_RenderClear(renderer);
@@ -19,7 +19,6 @@ int main(int argc, char** argv) {
     Uint8 const* touche;
     SDL_Event touche2;
     SDL_Rect rectangle;
-    SDL_Rect rectangleWind;
     SDL_Surface* fond;
     SDL_Texture* texture;
     int jeu = 0;
@@ -42,8 +41,8 @@ int main(int argc, char** argv) {
     fond = SDL_LoadBMP("C:/Users/Public/SFBackground.bmp");//recupere image de fond
     texture = SDL_CreateTextureFromSurface(renderer, fond);
     SDL_FreeSurface(fond);
-    
-    
+
+
     SDL_RenderCopy(renderer, texture, NULL, NULL);
     SDL_RenderPresent(renderer);// met a jour le renderer
 
@@ -54,46 +53,34 @@ int main(int argc, char** argv) {
     SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);// choisis la coucleur 
     SDL_RenderDrawRect(renderer, &rectangle);// fait un rectangle
     SDL_RenderPresent(renderer);// met a jour le renderer
-    
+
 
 
     while (jeu == 0)
     {
         touche = SDL_GetKeyboardState(NULL);
 
-        
-        if (saut == 2) {
-            if (rectangle.y < 500) {
-                rectangle.y += 2;
-            }
-            else if (rectangle.y == 500) {
-                saut = 0;
-            }
-            affichage(texture, renderer, &rectangle);
-        }
 
         if (touche[SDL_SCANCODE_D] && (snick == 0)) {
             if (rectangle.x < 1680)
             {
-                rectangle.x += 1;
+                rectangle.x += 2;
             }
-            affichage(texture,renderer,&rectangle);
         }
-        
+
         if (touche[SDL_SCANCODE_A] && (snick == 0)) {
 
             if (rectangle.x > 20)
             {
-                rectangle.x -= 1;
+                rectangle.x -= 2;
             }
 
-            affichage(texture, renderer, &rectangle);
         }
+
         if ((touche[SDL_SCANCODE_S]) && (saut == 0)) {
             rectangle.y = 750;
             rectangle.h = 250;
             snick = 1;
-            affichage(texture, renderer, &rectangle);
         }
         if ((touche[SDL_SCANCODE_W]) && (saut == 0) && (snick == 0))
         {
@@ -105,36 +92,13 @@ int main(int argc, char** argv) {
             }
 
         }
-        if ((saut == 1) && (touche[SDL_SCANCODE_D] && snick == 0)) {
-            if (rectangle.y < 150) {
-                saut = 2;
-            }
-            rectangle.y -= 4; // - pour monter car logique SDL
-            if (rectangle.x < 1680)
-            {
-                rectangle.x += 2; // parcour deplacement horizontal
-            }
-            affichage(texture, renderer, &rectangle);
-        }
 
-        if ((saut == 1) && (touche[SDL_SCANCODE_A] && snick == 0)) {
-            if (rectangle.y < 150) {
-                saut = 2;
-            }
-            rectangle.y -= 4; // - pour monter car logique SDL
-            if (rectangle.x > 20)
-            {
-                rectangle.x -= 2;// parcour deplacement horizontal
-            } 
-            affichage(texture, renderer, &rectangle);
-        }
 
         if (saut == 1) {
             if (rectangle.y < 150) {
                 saut = 2;
             }
             rectangle.y -= 2;
-            affichage(texture, renderer, &rectangle);
         }
         if (saut == 2) {
             if (rectangle.y < 500) {
@@ -143,46 +107,17 @@ int main(int argc, char** argv) {
             else if (rectangle.y == 500) {
                 saut = 0;
             }
-            affichage(texture, renderer, &rectangle);
         }
 
-        if ((saut == 2) && (touche[SDL_SCANCODE_A] && snick == 0)) {
-            if (rectangle.y < 500) {
-                rectangle.y += 4; // - pour monter car logique SDL
-            }
-            else if (rectangle.y == 500) {
-                saut = 0;
-            }
-
-            if (rectangle.x > 20)
-            {
-                rectangle.x -= 2;// parcour deplacement horizontal
-            }
-            affichage(texture, renderer, &rectangle);
-        }
-
-        if ((saut == 2) && (touche[SDL_SCANCODE_D] && snick == 0)) {
-            if (rectangle.y < 500) {
-                rectangle.y += 4; // - pour monter car logique SDL
-            }
-            else if (rectangle.y == 500) {
-                saut = 0;
-            }
-            if (rectangle.x < 1680)
-            {
-                rectangle.x += 2; // parcour deplacement horizontal
-            }
-            affichage(texture, renderer, &rectangle);
-        }
 
         if ((touche[SDL_SCANCODE_S] == 0) && (snick == 1) && (saut == 0)) {
             rectangle.y = 500;
             rectangle.h = 500;
             snick = 0;
-            affichage(texture, renderer, &rectangle);
         }
+        affichage(texture, renderer, &rectangle);
 
-        
+
         SDL_PollEvent(&touche2);// Récupération des actions de l'utilisateur
         switch (touche2.type)
         {
@@ -190,13 +125,14 @@ int main(int argc, char** argv) {
             switch (touche2.key.keysym.sym)
             {
             case SDLK_ESCAPE:// Regarde si == touche ESC
+                SDL_DestroyTexture(texture);
                 SDL_DestroyRenderer(renderer);
                 SDL_DestroyWindow(pwindow); // Detruit la fenetre
                 jeu = 1;
                 break;
 
-           }
-           break;
+            }
+            break;
         }
     }
 
