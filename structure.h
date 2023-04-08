@@ -1,8 +1,7 @@
-typedef struct Coordonees Coordonees;
+typedef struct perso perso;
 
-struct Coordonees {
-	int x;
-	int y;
-	int w;
-	int h;
+struct perso {
+	int pv;
+	char name;
+	int coup;
 };
