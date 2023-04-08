@@ -78,7 +78,7 @@ int main(int argc, char **argv) {
             SDL_RenderDrawRect(renderer, &rectangle);
             SDL_RenderPresent(renderer);
         }
-        if ((touche[SDL_SCANCODE_W])&&(saut==0))
+        if ((touche[SDL_SCANCODE_W])&&(saut==0) && (snick==0))
         {
             if (rectangle.y > 150) {
                 saut = 1;
@@ -91,7 +91,7 @@ int main(int argc, char **argv) {
         }
         if (saut == 1) {
             if (rectangle.y < 150) {
-            saut = 2;
+                saut = 2;
             }
             rectangle.y -= 2;
             SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
