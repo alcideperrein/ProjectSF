@@ -41,6 +41,7 @@ int main(int argc, char** argv) {
 
     fond = SDL_LoadBMP("C:/Users/Public/SFBackground.bmp");//recupere image de fond
     texture = SDL_CreateTextureFromSurface(renderer, fond);
+    SDL_FreeSurface(fond);
     
     
     SDL_RenderCopy(renderer, texture, NULL, NULL);
@@ -60,6 +61,17 @@ int main(int argc, char** argv) {
     {
         touche = SDL_GetKeyboardState(NULL);
 
+        
+        if (saut == 2) {
+            if (rectangle.y < 500) {
+                rectangle.y += 2;
+            }
+            else if (rectangle.y == 500) {
+                saut = 0;
+            }
+            affichage(texture, renderer, &rectangle);
+        }
+
         if (touche[SDL_SCANCODE_D] && (snick == 0)) {
             if (rectangle.x < 1680)
             {
@@ -67,6 +79,7 @@ int main(int argc, char** argv) {
             }
             affichage(texture,renderer,&rectangle);
         }
+        
         if (touche[SDL_SCANCODE_A] && (snick == 0)) {
 
             if (rectangle.x > 20)
@@ -92,6 +105,30 @@ int main(int argc, char** argv) {
             }
 
         }
+        if ((saut == 1) && (touche[SDL_SCANCODE_D] && snick == 0)) {
+            if (rectangle.y < 150) {
+                saut = 2;
+            }
+            rectangle.y -= 4; // - pour monter car logique SDL
+            if (rectangle.x < 1680)
+            {
+                rectangle.x += 2; // parcour deplacement horizontal
+            }
+            affichage(texture, renderer, &rectangle);
+        }
+
+        if ((saut == 1) && (touche[SDL_SCANCODE_A] && snick == 0)) {
+            if (rectangle.y < 150) {
+                saut = 2;
+            }
+            rectangle.y -= 4; // - pour monter car logique SDL
+            if (rectangle.x > 20)
+            {
+                rectangle.x -= 2;// parcour deplacement horizontal
+            } 
+            affichage(texture, renderer, &rectangle);
+        }
+
         if (saut == 1) {
             if (rectangle.y < 150) {
                 saut = 2;
@@ -105,6 +142,35 @@ int main(int argc, char** argv) {
             }
             else if (rectangle.y == 500) {
                 saut = 0;
+            }
+            affichage(texture, renderer, &rectangle);
+        }
+
+        if ((saut == 2) && (touche[SDL_SCANCODE_A] && snick == 0)) {
+            if (rectangle.y < 500) {
+                rectangle.y += 4; // - pour monter car logique SDL
+            }
+            else if (rectangle.y == 500) {
+                saut = 0;
+            }
+
+            if (rectangle.x > 20)
+            {
+                rectangle.x -= 2;// parcour deplacement horizontal
+            }
+            affichage(texture, renderer, &rectangle);
+        }
+
+        if ((saut == 2) && (touche[SDL_SCANCODE_D] && snick == 0)) {
+            if (rectangle.y < 500) {
+                rectangle.y += 4; // - pour monter car logique SDL
+            }
+            else if (rectangle.y == 500) {
+                saut = 0;
+            }
+            if (rectangle.x < 1680)
+            {
+                rectangle.x += 2; // parcour deplacement horizontal
             }
             affichage(texture, renderer, &rectangle);
         }
