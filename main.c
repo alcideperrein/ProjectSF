@@ -5,7 +5,6 @@
 
 void affichage(SDL_Texture* texture, SDL_Renderer* renderer, SDL_Rect* rectangle)
 {
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
     SDL_RenderClear(renderer);
     SDL_RenderCopy(renderer, texture, NULL, NULL);
     SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);
@@ -18,11 +17,10 @@ int main(int argc, char** argv) {
     SDL_Renderer* renderer;
     Uint8 const* touche;
     SDL_Event touche2;
-    SDL_Rect rectangle;
+    SDL_Rect rectangle = { 20, 500, 220, 500 };
     SDL_Surface* fond;
     SDL_Texture* texture;
     int jeu = 0;
-    int temps = 1;
     int saut = 0;
     int snick = 0;
 
@@ -37,21 +35,13 @@ int main(int argc, char** argv) {
         SDL_WINDOW_FULLSCREEN);// Cree la fenêtre de dimension 1920px par 1080px en fullscreen
 
     renderer = SDL_CreateRenderer(pwindow, -1, SDL_RENDERER_SOFTWARE);
-
     fond = SDL_LoadBMP("C:/Users/Public/SFBackground.bmp");//recupere image de fond
     texture = SDL_CreateTextureFromSurface(renderer, fond);
     SDL_FreeSurface(fond);
 
 
     SDL_RenderCopy(renderer, texture, NULL, NULL);
-    SDL_RenderPresent(renderer);// met a jour le renderer
-
-    rectangle.x = 20;
-    rectangle.y = 500;
-    rectangle.h = 500;
-    rectangle.w = 220;
-    SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);// choisis la coucleur 
-    SDL_RenderDrawRect(renderer, &rectangle);// fait un rectangle
+    SDL_RenderPresent(renderer);// met a jour le 
     SDL_RenderPresent(renderer);// met a jour le renderer
 
 
@@ -125,8 +115,8 @@ int main(int argc, char** argv) {
             switch (touche2.key.keysym.sym)
             {
             case SDLK_ESCAPE:// Regarde si == touche ESC
-                SDL_DestroyTexture(texture);
-                SDL_DestroyRenderer(renderer);
+                SDL_DestroyTexture(texture);// detruit la texture
+                SDL_DestroyRenderer(renderer);// detruit le rendu
                 SDL_DestroyWindow(pwindow); // Detruit la fenetre
                 jeu = 1;
                 break;
