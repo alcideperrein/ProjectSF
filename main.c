@@ -33,8 +33,13 @@ void haut(Coordonees* point)
     (*point).y = 0;
 }
 
+void SDL_ExitWithError(const char* message) {
 
+    SDL_Log("ERREUR : %s > %s\n", message, SDL_GetError());
+    SDL_Quit();
+    exit(EXIT_FAILURE);
 
+}
 int main(int argc, char **argv) {
     SDL_Window* window;
     SDL_Renderer* renderer;
@@ -78,50 +83,50 @@ int main(int argc, char **argv) {
 
     while (jeu==0) 
     {
-        touche = SDL_GetKeyboardState(NULL);
+        //    touche = SDL_GetKeyboardState(NULL);
 
-        if (touche[SDL_SCANCODE_D] && touche[SDL_SCANCODE_S]==0) {
-            if (rectangle.x < 1680)
-            {
-                rectangle.x += 1;
-            }
-            SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-            SDL_RenderClear(renderer);
-            SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
-            SDL_RenderDrawRect(renderer, &rectangle);
-            SDL_RenderPresent(renderer);
-        }
-        if (touche[SDL_SCANCODE_A] && touche[SDL_SCANCODE_S]==0) {
+        //    if (touche[SDL_SCANCODE_D] && touche[SDL_SCANCODE_S]==0) {
+        //        if (rectangle.x < 1680)
+        //        {
+        //            rectangle.x += 1;
+        //        }
+        //        SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+        //        SDL_RenderClear(renderer);
+        //        SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+        //        SDL_RenderDrawRect(renderer, &rectangle);
+        //        SDL_RenderPresent(renderer);
+        //    }
+        //    if (touche[SDL_SCANCODE_A] && touche[SDL_SCANCODE_S]==0) {
 
-                if (rectangle.x > 20)
-                {
-                    rectangle.x -= 1;
-                }
-                SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-                SDL_RenderClear(renderer);
-                SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
-                SDL_RenderDrawRect(renderer, &rectangle);
-                SDL_RenderPresent(renderer);
-            }
-        if (touche[SDL_SCANCODE_S]) {
-            rectangle.y = 750;
-            rectangle.h = 250;
-            SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-            SDL_RenderClear(renderer);
-            SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
-            SDL_RenderDrawRect(renderer, &rectangle);
-            SDL_RenderPresent(renderer);
-        }
+        //            if (rectangle.x > 20)
+        //            {
+        //                rectangle.x -= 1;
+        //            }
+        //            SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+        //            SDL_RenderClear(renderer);
+        //            SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+        //            SDL_RenderDrawRect(renderer, &rectangle);
+        //            SDL_RenderPresent(renderer);
+        //        }
+        //    if (touche[SDL_SCANCODE_S]) {
+        //        rectangle.y = 750;
+        //        rectangle.h = 250;
+        //        SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+        //        SDL_RenderClear(renderer);
+        //        SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+        //        SDL_RenderDrawRect(renderer, &rectangle);
+        //        SDL_RenderPresent(renderer);
+        //    }
 
-        if (touche[SDL_SCANCODE_S]==0) {
-            rectangle.y = 500;
-            rectangle.h = 500;
-            SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-            SDL_RenderClear(renderer);
-            SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
-            SDL_RenderDrawRect(renderer, &rectangle);
-            SDL_RenderPresent(renderer);
-        }
+        //    if (touche[SDL_SCANCODE_S]==0) {
+        //        rectangle.y = 500;
+        //        rectangle.h = 500;
+        //        SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+        //        SDL_RenderClear(renderer);
+        //        SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+        //        SDL_RenderDrawRect(renderer, &rectangle);
+        //        SDL_RenderPresent(renderer);
+        //    }
 
 
        SDL_PollEvent(&touche2);// Récupération des actions de l'utilisateur
@@ -141,7 +146,7 @@ int main(int argc, char **argv) {
               
                 SDL_Surface *image = NULL;
                 SDL_Texture *background = NULL;
-                background = SDL_LoadBMP("src/C:/Users/alcid/OneDrive/Bureau/ProjectSF");
+                image = SDL_LoadBMP("src/C:/Users/Public/SFBackground.bmp");
                 if (image == NULL) {
 
                     SDL_DestroyRenderer(rendererWind);
@@ -149,7 +154,7 @@ int main(int argc, char **argv) {
                     SDL_ExitWithError("Impossible de charger l'image");
                 }
 
-                background = SDL_CreateTextureFromSurface(renderer, image);
+                background = SDL_CreateTextureFromSurface(rendererWind, image);
                 
                 SDL_FreeSurface(image);
                
@@ -159,9 +164,8 @@ int main(int argc, char **argv) {
                     SDL_DestroyWindow(window);
                     SDL_ExitWithError("Impossible de charger la texture");
                 }
-                SDL_Rect rectangleWind;
                 if (SDL_QueryTexture(background, NULL, NULL, &rectangleWind.w, &rectangleWind.h) != 0) {
-                    SDL_DestroyRenderer(renderer);
+                    SDL_DestroyRenderer(rendererWind);
                     SDL_DestroyWindow(window);
                     SDL_ExitWithError("Impossible de charger la texture");
                 }
@@ -171,24 +175,26 @@ int main(int argc, char **argv) {
                 if (SDL_RenderCopy(rendererWind, background,NULL, &rectangleWind) !=0)
                 {
 
-                    SDL_DestroyRenderer(renderer);
+                    SDL_DestroyRenderer(rendererWind);
                     SDL_DestroyWindow(window);
                     SDL_ExitWithError("Impossible d'afficher la texture");
                 }
                 SDL_RenderPresent(rendererWind);
+       
+       
         SDL_Quit();
         return 0;
 }
 
 
 
-/* modifier pour les touches 
-liens:
-https://wiki.libsdl.org/SDL2/SDL_GetKeyboardState
-https://wiki.libsdl.org/SDL2/SDL_Scancode
-*/
+        /* modifier pour les touches 
+        liens:
+        https://wiki.libsdl.org/SDL2/SDL_GetKeyboardState
+        https://wiki.libsdl.org/SDL2/SDL_Scancode
+        */
 
-/*case SDLK_s:
+        /*case SDLK_s:
                        rectangle.y = 500;
                        rectangle.h = 500;
                        temps = 1;
