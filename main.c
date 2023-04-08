@@ -261,6 +261,6 @@ int main(int argc, char **argv) {
     }
 
 
-    //printf("bienvenue sur la sdl %d.%d.%d !\n", nb.major, nb.minor, nb.patch);
+    //printf("bienvenue sur la sdl %d.%d.%d !\n", nb.major, nb.minor, nb.patch);;
 
         
