@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void affichage(SDL_Texture* texture, SDL_Renderer* renderer, SDL_Rect* rectangle, SDL_Rect* rectangleCoup,int *pcoup)
+void affichage(SDL_Texture* texture, SDL_Renderer* renderer, SDL_Rect* rectangle, SDL_Rect* rectangleCoup,int *pcoup)// est définie pour dessiner les éléments du jeu sur la fenêtre. Elle prend en paramètre la texture à afficher, le renderer, les rectangles de base et de coup, et le coup choisit.
 {
     SDL_RenderClear(renderer);
     SDL_RenderCopy(renderer, texture, NULL, NULL);
@@ -53,7 +53,7 @@ int main(int argc, char** argv) {
 
     while (jeu == 0)
     {
-        touche = SDL_GetKeyboardState(NULL);
+        touche = SDL_GetKeyboardState(NULL); // récupérer l'état des touches du clavier
 
 
         if (touche[SDL_SCANCODE_D] && (coup==0)) {
