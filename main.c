@@ -28,7 +28,7 @@ int main(int argc, char** argv) {
     int saut = 0;
     int snick = 0;
     int coup = 0;
-    int cote = 0;
+    int cote = 1;
 
     SDL_Init(SDL_INIT_VIDEO);
     SDL_version nb;
@@ -141,17 +141,17 @@ int main(int argc, char** argv) {
 
             if ((cote == 1) && (snick == 1)) {
                 coup = 5;
-                cote = 3;
+                cote = 3; // Pour pas qu'il repasse a coup 5
             }
 
             if ((cote == 2) && (snick == 1)) {
                 coup = 7;
-                cote = 3;
+                cote = 3; // Pour pas qu'il repasse a coup 7
             }
         }
         
 
-        if ((coup == 1) && (saut==0)) {
+        if ((coup == 1) && (saut==0)) { // coup de poing droit
             rectangleCoup.h = 100;
             rectangleCoup.x = rectangle.x + rectangle.w;
             rectangleCoup.y =rectangle.y+ 100;
@@ -160,15 +160,15 @@ int main(int argc, char** argv) {
             }
             rectangleCoup.w += 2;
 
-        }
-        if ((coup == 2) && (saut == 0)) {
+        } 
+        if ((coup == 2) && (saut == 0)) { // retour coup de point gauche 
             rectangleCoup.w -= 2;
             if (rectangleCoup.w == 0) {
                 coup = 0;
                 cote = 1;
             }
         }
-        if ((coup == 3) && (saut == 0)) {
+        if ((coup == 3) && (saut == 0)) {// coup de poing gauche
             rectangleCoup.h = 100;
             rectangleCoup.x = rectangle.x;
             rectangleCoup.y = rectangle.y + 100;
@@ -178,7 +178,7 @@ int main(int argc, char** argv) {
             rectangleCoup.w -= 2;
         }
 
-        if ((coup == 4) && (saut == 0)) {
+        if ((coup == 4) && (saut == 0)) { // retour coup de point gauche
             rectangleCoup.w += 2;
             if (rectangleCoup.w == 0) {
                 coup = 0;
@@ -186,7 +186,7 @@ int main(int argc, char** argv) {
             }
         }
 
-        if ((coup == 5) && (saut == 0)) {
+        if ((coup == 5) && (saut == 0)) {  // coup de pied bas droit
             rectangleCoup.h = 100;
             rectangleCoup.x = rectangle.x+rectangle.w;
             rectangleCoup.y = rectangle.y+100;
@@ -196,7 +196,7 @@ int main(int argc, char** argv) {
             rectangleCoup.w += 2;
         }
 
-        if ((coup == 6) && (saut == 0)) {
+        if ((coup == 6) && (saut == 0)) { // retour coup de pied bas droit
             rectangleCoup.w -= 2;
             if (rectangleCoup.w == 0) {
                 coup = 0;
@@ -204,7 +204,7 @@ int main(int argc, char** argv) {
             }
         }
 
-        if ((coup == 7) && (saut == 0)) {
+        if ((coup == 7) && (saut == 0)) { // coup de pied bas gauche
             rectangleCoup.h = 100;
             rectangleCoup.x = rectangle.x;
             rectangleCoup.y = rectangle.y + 100;
@@ -215,7 +215,7 @@ int main(int argc, char** argv) {
 
         }
 
-        if ((coup == 8) && (saut == 0)) {
+        if ((coup == 8) && (saut == 0)) { // retour coup de pied bas gauche
             rectangleCoup.w += 2;
             if (rectangleCoup.w == 0) {
                 coup = 0;
