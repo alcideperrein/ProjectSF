@@ -28,6 +28,7 @@ int main(int argc, char** argv) {
     int saut = 0;
     int snick = 0;
     int coup = 0;
+
     int cote = 1;
 
     SDL_Init(SDL_INIT_VIDEO);
@@ -56,7 +57,7 @@ int main(int argc, char** argv) {
         touche = SDL_GetKeyboardState(NULL); // récupérer l'état des touches du clavier
 
 
-        if (touche[SDL_SCANCODE_D] && (coup==0)) {
+        if (touche[SDL_SCANCODE_D] && (coup==0 || coup==9 || coup==10)) {
             if (rectangle.x < 1680)
             {
                 if (snick == 0) {
@@ -129,6 +130,7 @@ int main(int argc, char** argv) {
             snick = 0;
         }
 
+
         if ((touche[SDL_SCANCODE_C]) && (saut==0)) {
             if ((cote == 1) && (snick == 0) ) {
                 coup = 1;
@@ -147,6 +149,13 @@ int main(int argc, char** argv) {
             if ((cote == 2) && (snick == 1)) {
                 coup = 7;
                 cote = 3; // Pour pas qu'il repasse a coup 7
+            }
+        }
+
+        if ((touche[SDL_SCANCODE_C]) && (snick == 0)) {
+            if ((cote == 1) && (saut != 0)) {
+                coup = 9;
+                cote = 3;
             }
         }
         
@@ -225,6 +234,28 @@ int main(int argc, char** argv) {
         }
 
 
+        if ((coup == 9) ) {
+            rectangleCoup.h = 100;
+            rectangleCoup.x = rectangle.x+rectangle.w;
+            rectangleCoup.y = rectangle.y + 100;
+            if (rectangleCoup.w > 180) {
+                coup = 10;
+            }
+            rectangleCoup.w += 2;
+
+        }
+
+        if ((coup == 10) ) { // retour coup de pied bas gauche
+            rectangleCoup.h = 100;
+            rectangleCoup.x = rectangle.x + rectangle.w;
+            rectangleCoup.y = rectangle.y + 100;
+            rectangleCoup.w -= 2;
+            if (rectangleCoup.w == 0) {
+                coup = 0;
+                cote = 1;
+            }
+
+        }
 
         
 
