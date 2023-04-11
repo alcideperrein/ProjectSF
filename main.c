@@ -172,7 +172,7 @@ int main(int argc, char** argv) {
         } 
         if ((coup == 2) && (saut == 0)) { // retour coup de point gauche 
             rectangleCoup.w -= 3;
-            if (rectangleCoup.w == 0) {
+            if (rectangleCoup.w <= 0) {
                 coup = 0;
                 cote = 1;
             }
@@ -200,17 +200,17 @@ int main(int argc, char** argv) {
             rectangleCoup.x = rectangle.x+rectangle.w;
             rectangleCoup.y = rectangle.y+100;
             if (rectangleCoup.w > 180) {
-                coup = 2;
+                coup = 6;
             }
             rectangleCoup.w += 2;
         }
 
-        if ((coup == 6) && (saut == 0)) { // retour coup de pied bas droit
-            rectangleCoup.w -= 2;
+        if ((coup == 6) && (saut == 0)) { // retour coup de pied bas 
             if (rectangleCoup.w == 0) {
                 coup = 0;
                 cote = 1;
             }
+            rectangleCoup.w -= 2;
         }
 
         if ((coup == 7) && (saut == 0)) { // coup de pied bas gauche
@@ -224,19 +224,19 @@ int main(int argc, char** argv) {
 
         }
 
-        if ((coup == 8) && (saut == 0)) { // retour coup de pied bas gauche
-            rectangleCoup.w += 2;
+        if ((coup == 8) && (saut == 0)) { // retour coup de pied bas droit
+            
             if (rectangleCoup.w == 0) {
                 coup = 0;
                 cote = 2;
             }
-
+            rectangleCoup.w += 2;
         }
 
 
-        if ((coup == 9) ) {
+        if ((coup == 9)) { // coup saut
             rectangleCoup.h = 100;
-            rectangleCoup.x = rectangle.x+rectangle.w;
+            rectangleCoup.x = rectangle.x + rectangle.w;
             rectangleCoup.y = rectangle.y + 100;
             if (rectangleCoup.w > 180) {
                 coup = 10;
@@ -245,7 +245,7 @@ int main(int argc, char** argv) {
 
         }
 
-        if ((coup == 10) ) { // retour coup de pied bas gauche
+        if ((coup == 10)) { // retour coup saut
             rectangleCoup.h = 100;
             rectangleCoup.x = rectangle.x + rectangle.w;
             rectangleCoup.y = rectangle.y + 100;
