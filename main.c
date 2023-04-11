@@ -167,11 +167,11 @@ int main(int argc, char** argv) {
             if (rectangleCoup.w > 220) {
                 coup = 2;
             }
-            rectangleCoup.w += 2;
+            rectangleCoup.w += 3;
 
         } 
         if ((coup == 2) && (saut == 0)) { // retour coup de point gauche 
-            rectangleCoup.w -= 2;
+            rectangleCoup.w -= 3;
             if (rectangleCoup.w == 0) {
                 coup = 0;
                 cote = 1;
