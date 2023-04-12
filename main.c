@@ -28,6 +28,7 @@ int main(int argc, char** argv) {
     int saut = 0;
     int snick = 0;
     int coup = 0;
+    int retour=0;
 
     int cote = 1;
 
@@ -152,12 +153,42 @@ int main(int argc, char** argv) {
             }
         }
 
-        if ((touche[SDL_SCANCODE_C]) && (snick == 0)) {
+        if ((touche[SDL_SCANCODE_C]) && (snick == 0) &&(retour==0)) {
             if ((cote == 1) && (saut != 0)) {
                 coup = 9;
                 cote = 3;
+                
+            }
+
+            if ((cote == 2) && (saut != 0)) {
+                coup = 11;
+                cote = 3;
+
             }
         }
+
+        if ((touche[SDL_SCANCODE_A]) && (saut == 0)) {
+            if ((cote == 1) && (snick == 0)) {
+                coup = 1;
+                cote = 3;// Pour pas qu'il repasse a coup 1
+            }
+            if ((cote == 2) && (snick == 0)) {
+                coup = 3;
+                cote = 3; // Pour pas qu'il repasse a coup 3
+            }
+
+            if ((cote == 1) && (snick == 1)) {
+                coup = 5;
+                cote = 3; // Pour pas qu'il repasse a coup 5
+            }
+
+            if ((cote == 2) && (snick == 1)) {
+                coup = 7;
+                cote = 3; // Pour pas qu'il repasse a coup 7
+            }
+        }
+
+ 
         
 
         if ((coup == 1) && (saut==0)) { // coup de poing droit
@@ -184,12 +215,12 @@ int main(int argc, char** argv) {
             if (rectangleCoup.w < -220) {
                 coup = 4;
             }
-            rectangleCoup.w -= 2;
+            rectangleCoup.w -= 3;
         }
 
         if ((coup == 4) && (saut == 0)) { // retour coup de point gauche
-            rectangleCoup.w += 2;
-            if (rectangleCoup.w == 0) {
+            rectangleCoup.w += 3;
+            if (rectangleCoup.w >= 0) {
                 coup = 0;
                 cote = 2;
             }
@@ -238,8 +269,9 @@ int main(int argc, char** argv) {
             rectangleCoup.h = 100;
             rectangleCoup.x = rectangle.x + rectangle.w;
             rectangleCoup.y = rectangle.y + 100;
-            if (rectangleCoup.w > 180) {
+            if (rectangleCoup.w >= 180) {
                 coup = 10;
+                retour = 1;
             }
             rectangleCoup.w += 2;
 
@@ -253,6 +285,31 @@ int main(int argc, char** argv) {
             if (rectangleCoup.w == 0) {
                 coup = 0;
                 cote = 1;
+                retour = 0;
+            }
+        }
+
+         if ((coup == 11)) { // coup saut gauche
+            rectangleCoup.h = 100;
+            rectangleCoup.x = rectangle.x;
+            rectangleCoup.y = rectangle.y + 100;
+            if (rectangleCoup.w <= -180) {
+                coup = 12;
+                retour = 2;
+                }
+            rectangleCoup.w -= 2;
+
+            }
+
+        if ((coup == 12)) { // retour coup saut
+            rectangleCoup.h = 100;
+            rectangleCoup.x = rectangle.x;
+            rectangleCoup.y = rectangle.y + 100;
+            rectangleCoup.w += 2;
+            if (rectangleCoup.w <= 0) {
+                coup = 0;
+                cote = 2;
+                retour = 0;
             }
 
         }
