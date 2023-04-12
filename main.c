@@ -29,6 +29,8 @@ int main(int argc, char** argv) {
     int snick = 0;
     int coup = 0;
     int retour=0;
+    int coupLent = 0;
+  
 
     int cote = 1;
 
@@ -132,7 +134,14 @@ int main(int argc, char** argv) {
         }
 
 
-        if ((touche[SDL_SCANCODE_C]) && (saut==0)) {
+        if (((touche[SDL_SCANCODE_C]) || (touche[SDL_SCANCODE_Q]) || (touche[SDL_SCANCODE_E]) )&& (saut==0)) {
+            if (touche[SDL_SCANCODE_Q]) {
+                coupLent = 1;
+            }
+            if (touche[SDL_SCANCODE_E]) {
+                coupLent=2; // correspond a coup moyen
+            }
+
             if ((cote == 1) && (snick == 0) ) {
                 coup = 1;
                 cote = 3;// Pour pas qu'il repasse a coup 1
@@ -167,29 +176,7 @@ int main(int argc, char** argv) {
             }
         }
 
-        if ((touche[SDL_SCANCODE_A]) && (saut == 0)) {
-            if ((cote == 1) && (snick == 0)) {
-                coup = 1;
-                cote = 3;// Pour pas qu'il repasse a coup 1
-            }
-            if ((cote == 2) && (snick == 0)) {
-                coup = 3;
-                cote = 3; // Pour pas qu'il repasse a coup 3
-            }
-
-            if ((cote == 1) && (snick == 1)) {
-                coup = 5;
-                cote = 3; // Pour pas qu'il repasse a coup 5
-            }
-
-            if ((cote == 2) && (snick == 1)) {
-                coup = 7;
-                cote = 3; // Pour pas qu'il repasse a coup 7
-            }
-        }
-
- 
-        
+         
 
         if ((coup == 1) && (saut==0)) { // coup de poing droit
             rectangleCoup.h = 100;
@@ -198,14 +185,31 @@ int main(int argc, char** argv) {
             if (rectangleCoup.w > 220) {
                 coup = 2;
             }
-            rectangleCoup.w += 3;
+            if (coupLent == 1) {
+                rectangleCoup.w += 1;
+            }
+            else if (coupLent == 2) {
+                rectangleCoup.w += 2;
+            }
+            else { 
+                rectangleCoup.w += 3; 
+            }
 
         } 
         if ((coup == 2) && (saut == 0)) { // retour coup de point gauche 
-            rectangleCoup.w -= 3;
+            if (coupLent == 1) {
+                rectangleCoup.w -= 1;
+            }
+            else if (coupLent == 2) {
+                rectangleCoup.w -= 2;
+            }
+            else {
+                rectangleCoup.w -= 3;
+            }
             if (rectangleCoup.w <= 0) {
                 coup = 0;
                 cote = 1;
+                coupLent = 0;
             }
         }
         if ((coup == 3) && (saut == 0)) {// coup de poing gauche
@@ -215,14 +219,34 @@ int main(int argc, char** argv) {
             if (rectangleCoup.w < -220) {
                 coup = 4;
             }
-            rectangleCoup.w -= 3;
+            if (coupLent == 1) {
+                rectangleCoup.w -= 1;
+            }
+            else if (coupLent == 2) {
+                rectangleCoup.w -= 2;
+            }
+            
+            else
+            {
+                rectangleCoup.w -= 3;
+            }
         }
 
         if ((coup == 4) && (saut == 0)) { // retour coup de point gauche
-            rectangleCoup.w += 3;
+            if (coupLent == 1) {
+                rectangleCoup.w += 1;
+            }
+            else if (coupLent == 2) {
+                rectangleCoup.w += 2;
+            }
+            else {
+                rectangleCoup.w += 3;
+            }
+            
             if (rectangleCoup.w >= 0) {
                 coup = 0;
                 cote = 2;
+                coupLent = 0;
             }
         }
 
@@ -233,15 +257,34 @@ int main(int argc, char** argv) {
             if (rectangleCoup.w > 180) {
                 coup = 6;
             }
-            rectangleCoup.w += 2;
+            if (coupLent == 1) {
+                rectangleCoup.w += 1;
+            }
+            else if (coupLent == 2) {
+                rectangleCoup.w += 2;
+            }
+            else {
+                rectangleCoup.w += 3;
+            }
+            
         }
 
         if ((coup == 6) && (saut == 0)) { // retour coup de pied bas 
-            if (rectangleCoup.w == 0) {
+            if (rectangleCoup.w <= 0) {
                 coup = 0;
                 cote = 1;
+                coupLent = 0;
             }
-            rectangleCoup.w -= 2;
+            if (coupLent == 1) {
+                rectangleCoup.w -= 1;
+            }
+            else if (coupLent == 2) {
+                rectangleCoup.w -= 2;
+            }
+            else {
+                rectangleCoup.w -= 3;
+            }
+            
         }
 
         if ((coup == 7) && (saut == 0)) { // coup de pied bas gauche
@@ -251,21 +294,40 @@ int main(int argc, char** argv) {
             if (rectangleCoup.w < -180) {
                 coup = 8;
             }
-            rectangleCoup.w -= 2;
+            if (coupLent == 1) {
+                rectangleCoup.w -= 1;
+            }
+            else if (coupLent == 2) {
+                rectangleCoup.w -= 2;
+            }
+            else {
+                rectangleCoup.w -= 3;
+            }
+            
 
         }
 
-        if ((coup == 8) && (saut == 0)) { // retour coup de pied bas droit
+        if ((coup == 8) && (saut == 0)) { // retour coup de pied bas gauche
             
-            if (rectangleCoup.w == 0) {
+            if (rectangleCoup.w >= 0) {
                 coup = 0;
                 cote = 2;
+                coupLent = 0;
             }
-            rectangleCoup.w += 2;
+            if (coupLent == 1) {
+                rectangleCoup.w += 1;
+            }
+            else if (coupLent == 2) {
+                rectangleCoup.w += 2;
+            }
+            else {
+                rectangleCoup.w += 3;
+            }
+            
         }
 
 
-        if ((coup == 9)) { // coup saut
+        /*if ((coup == 9)) { // coup saut
             rectangleCoup.h = 100;
             rectangleCoup.x = rectangle.x + rectangle.w;
             rectangleCoup.y = rectangle.y + 100;
@@ -314,7 +376,7 @@ int main(int argc, char** argv) {
 
         }
 
-        
+        */
 
 
         SDL_PollEvent(&touche2);// Récupération des actions de l'utilisateur
