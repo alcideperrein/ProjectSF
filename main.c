@@ -32,7 +32,7 @@ int main(int argc, char** argv) {
     int coupLent = 0;
   
 
-    int cote = 1;
+    int side = 1;
 
     SDL_Init(SDL_INIT_VIDEO);
     SDL_version nb;
@@ -69,10 +69,10 @@ int main(int argc, char** argv) {
                 else {
                     rectangle.x += 1;
                 }
-                cote = 1;
+                side = 1;
             }
             if (rectangle.x > 1500) {
-                cote = 0;
+                side = 0;
             }
         }
 
@@ -86,10 +86,10 @@ int main(int argc, char** argv) {
                 else {
                     rectangle.x -= 1;
                 }
-                cote = 2;
+                side = 2;
             }
             if (rectangle.x < 200) {
-                cote = 0;
+                side = 0;
             }
 
         }
@@ -142,39 +142,39 @@ int main(int argc, char** argv) {
                 coupLent=2; // correspond a coup moyen
             }
 
-            if ((cote == 1) && (snick == 0) ) {
+            if ((side == 1) && (snick == 0) ) {
                 coup = 1;
-                cote = 3;// Pour pas qu'il repasse a coup 1
+                side = 3;// Pour pas qu'il repasse a coup 1
             }
-            if ((cote == 2) && (snick == 0)) {
+            if ((side == 2) && (snick == 0)) {
                 coup = 3;
-                cote = 3; // Pour pas qu'il repasse a coup 3
+                side = 3; // Pour pas qu'il repasse a coup 3
             }
 
-            if ((cote == 1) && (snick == 1)) {
+            if ((side == 1) && (snick == 1)) {
                 coup = 5;
-                cote = 3; // Pour pas qu'il repasse a coup 5
+                side = 3; // Pour pas qu'il repasse a coup 5
             }
 
-            if ((cote == 2) && (snick == 1)) {
+            if ((side == 2) && (snick == 1)) {
                 coup = 7;
-                cote = 3; // Pour pas qu'il repasse a coup 7
+                side = 3; // Pour pas qu'il repasse a coup 7
             }
         }
 
-        if ((touche[SDL_SCANCODE_C]) && (snick == 0) &&(retour==0)) {
-            if ((cote == 1) && (saut != 0)) {
+        /*if ((touche[SDL_SCANCODE_C]) && (snick == 0) && (retour == 0)) {
+            if ((side == 1) && (saut != 0)) {
                 coup = 9;
-                cote = 3;
+                side = 3;
                 
             }
 
-            if ((cote == 2) && (saut != 0)) {
+            if ((side == 2) && (saut != 0)) {
                 coup = 11;
-                cote = 3;
+                side = 3;
 
             }
-        }
+        }*/
 
          
 
@@ -208,7 +208,7 @@ int main(int argc, char** argv) {
             }
             if (rectangleCoup.w <= 0) {
                 coup = 0;
-                cote = 1;
+                side = 1;
                 coupLent = 0;
             }
         }
@@ -245,7 +245,7 @@ int main(int argc, char** argv) {
             
             if (rectangleCoup.w >= 0) {
                 coup = 0;
-                cote = 2;
+                side = 2;
                 coupLent = 0;
             }
         }
@@ -272,7 +272,7 @@ int main(int argc, char** argv) {
         if ((coup == 6) && (saut == 0)) { // retour coup de pied bas 
             if (rectangleCoup.w <= 0) {
                 coup = 0;
-                cote = 1;
+                side = 1;
                 coupLent = 0;
             }
             if (coupLent == 1) {
@@ -311,7 +311,7 @@ int main(int argc, char** argv) {
             
             if (rectangleCoup.w >= 0) {
                 coup = 0;
-                cote = 2;
+                side = 2;
                 coupLent = 0;
             }
             if (coupLent == 1) {
@@ -346,7 +346,7 @@ int main(int argc, char** argv) {
             rectangleCoup.w -= 2;
             if (rectangleCoup.w == 0) {
                 coup = 0;
-                cote = 1;
+                side = 1;
                 retour = 0;
             }
         }
@@ -370,7 +370,7 @@ int main(int argc, char** argv) {
             rectangleCoup.w += 2;
             if (rectangleCoup.w <= 0) {
                 coup = 0;
-                cote = 2;
+                side = 2;
                 retour = 0;
             }
 
