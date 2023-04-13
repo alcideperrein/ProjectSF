@@ -420,6 +420,8 @@ https://wiki.libsdl.org/SDL2/SDL_Scancode
 
 difficulté :
 
+    avoir le meme temps pour faire la boucle pour tout le monde
+
 
 */
 
