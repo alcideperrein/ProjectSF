@@ -186,25 +186,25 @@ int main(int argc, char** argv) {
                 coup = 2;
             }
             if (coupLent == 1) {
-                rectangleCoup.w += 1;
-            }
-            else if (coupLent == 2) {
                 rectangleCoup.w += 2;
             }
+            else if (coupLent == 2) {
+                rectangleCoup.w += 3;
+            }
             else { 
-                rectangleCoup.w += 3; 
+                rectangleCoup.w += 4; 
             }
 
         } 
         if ((coup == 2) && (saut == 0)) { // retour coup de point gauche 
             if (coupLent == 1) {
-                rectangleCoup.w -= 1;
-            }
-            else if (coupLent == 2) {
                 rectangleCoup.w -= 2;
             }
-            else {
+            else if (coupLent == 2) {
                 rectangleCoup.w -= 3;
+            }
+            else {
+                rectangleCoup.w -= 4;
             }
             if (rectangleCoup.w <= 0) {
                 coup = 0;
@@ -220,27 +220,27 @@ int main(int argc, char** argv) {
                 coup = 4;
             }
             if (coupLent == 1) {
-                rectangleCoup.w -= 1;
+                rectangleCoup.w -= 2;
             }
             else if (coupLent == 2) {
-                rectangleCoup.w -= 2;
+                rectangleCoup.w -= 3;
             }
             
             else
             {
-                rectangleCoup.w -= 3;
+                rectangleCoup.w -= 4;
             }
         }
 
         if ((coup == 4) && (saut == 0)) { // retour coup de point gauche
             if (coupLent == 1) {
-                rectangleCoup.w += 1;
-            }
-            else if (coupLent == 2) {
                 rectangleCoup.w += 2;
             }
-            else {
+            else if (coupLent == 2) {
                 rectangleCoup.w += 3;
+            }
+            else {
+                rectangleCoup.w += 4;
             }
             
             if (rectangleCoup.w >= 0) {
@@ -258,13 +258,13 @@ int main(int argc, char** argv) {
                 coup = 6;
             }
             if (coupLent == 1) {
-                rectangleCoup.w += 1;
-            }
-            else if (coupLent == 2) {
                 rectangleCoup.w += 2;
             }
-            else {
+            else if (coupLent == 2) {
                 rectangleCoup.w += 3;
+            }
+            else {
+                rectangleCoup.w += 4;
             }
             
         }
@@ -276,13 +276,13 @@ int main(int argc, char** argv) {
                 coupLent = 0;
             }
             if (coupLent == 1) {
-                rectangleCoup.w -= 1;
-            }
-            else if (coupLent == 2) {
                 rectangleCoup.w -= 2;
             }
-            else {
+            else if (coupLent == 2) {
                 rectangleCoup.w -= 3;
+            }
+            else {
+                rectangleCoup.w -= 4;
             }
             
         }
@@ -295,13 +295,13 @@ int main(int argc, char** argv) {
                 coup = 8;
             }
             if (coupLent == 1) {
-                rectangleCoup.w -= 1;
-            }
-            else if (coupLent == 2) {
                 rectangleCoup.w -= 2;
             }
-            else {
+            else if (coupLent == 2) {
                 rectangleCoup.w -= 3;
+            }
+            else {
+                rectangleCoup.w -= 4;
             }
             
 
@@ -315,13 +315,13 @@ int main(int argc, char** argv) {
                 coupLent = 0;
             }
             if (coupLent == 1) {
-                rectangleCoup.w += 1;
-            }
-            else if (coupLent == 2) {
                 rectangleCoup.w += 2;
             }
-            else {
+            else if (coupLent == 2) {
                 rectangleCoup.w += 3;
+            }
+            else {
+                rectangleCoup.w += 4;
             }
             
         }
