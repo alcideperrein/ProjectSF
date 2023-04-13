@@ -60,7 +60,7 @@ int main(int argc, char** argv) {
         touche = SDL_GetKeyboardState(NULL); // récupérer l'état des touches du clavier
 
 
-        if (touche[SDL_SCANCODE_D] && (coup==0 || coup==9 || coup==10)) {
+        if (touche[SDL_SCANCODE_D] && (coup==0) && snick==0){
             if (rectangle.x < 1680)
             {
                 if (snick == 0) {
@@ -76,7 +76,7 @@ int main(int argc, char** argv) {
             }
         }
 
-        if (touche[SDL_SCANCODE_A] && (coup == 0)) {
+        if (touche[SDL_SCANCODE_A] && (coup == 0) && snick == 0) {
 
             if (rectangle.x > 20)
             {
