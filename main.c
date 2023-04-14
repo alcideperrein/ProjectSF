@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void affichage(SDL_Texture* texture, SDL_Renderer* renderer, SDL_Rect* rectangle, SDL_Rect* rectangleCoup,int *pcoup)// est définie pour dessiner les éléments du jeu sur la fenêtre. Elle prend en paramètre la texture à afficher, le renderer, les rectangles de base et de coup, et le coup choisit.
+void affichage(SDL_Texture* texture, SDL_Renderer* renderer, SDL_Rect* rectangle, SDL_Rect* rectangleCoup,SDL_Rect* barreDeVie, SDL_Rect* barreDeVieDroite, SDL_Rect* barreDeVieRed, SDL_Rect* barreDeVieRedDroite, int *pcoup)// est définie pour dessiner les éléments du jeu sur la fenêtre. Elle prend en paramètre la texture à afficher, le renderer, les rectangles de base et de coup, et le coup choisit.
 {
     SDL_RenderClear(renderer);
     SDL_RenderCopy(renderer, texture, NULL, NULL);
@@ -12,6 +12,12 @@ void affichage(SDL_Texture* texture, SDL_Renderer* renderer, SDL_Rect* rectangle
     if (*pcoup != 0) {
         SDL_RenderDrawRect(renderer, rectangleCoup);
     }
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+    SDL_RenderFillRect(renderer, barreDeVieRed);
+    SDL_RenderFillRect(renderer, barreDeVieRedDroite);
+    SDL_SetRenderDrawColor(renderer, 255, 255, 0, SDL_ALPHA_OPAQUE);
+    SDL_RenderFillRect(renderer, barreDeVie);
+    SDL_RenderFillRect(renderer, barreDeVieDroite);
     SDL_RenderPresent(renderer);
 }
 
@@ -22,6 +28,10 @@ int main(int argc, char** argv) {
     SDL_Event touche2;
     SDL_Rect rectangle = { 20, 500, 220, 500 };
     SDL_Rect rectangleCoup = { 0, 0, 0, 100 };
+    SDL_Rect barreDeVie = {160, 80, 680, 40 };
+    SDL_Rect barreDeVieRed = {160, 80, 700,40};
+    SDL_Rect barreDeVieDroite = {1180 , 80, 680,40};
+    SDL_Rect barreDeVieRedDroite = {1160, 80, 700,40};
     SDL_Surface* fond;
     SDL_Texture* texture;
     int jeu = 0;
@@ -395,7 +405,7 @@ int main(int argc, char** argv) {
             }
             break;
         }
-        affichage(texture, renderer, &rectangle, &rectangleCoup,&coup);
+        affichage(texture, renderer, &rectangle, &rectangleCoup,&barreDeVie,&barreDeVieDroite, &barreDeVieRed, &barreDeVieRedDroite, &coup);
     }
 
 
