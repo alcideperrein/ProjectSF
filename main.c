@@ -23,8 +23,11 @@ int main(int argc, char** argv) {
     SDL_Event touche2;
     SDL_Rect rectangle = { 20, 500, 220, 500 };
     SDL_Rect rectangleCoup = { 0, 0, 0, 100 };
-    SDL_Rect rectanglePunchingBall = { 800, 500, 220, 500 };
+    SDL_Rect rectanglePunchingBall = { 1600, 500, 220, 500 };
+    SDL_Rect source = { 0,0,24,38 };
+    SDL_Surface* sprites;
     SDL_Surface* fond;
+    SDL_Texture* perso1;
     SDL_Texture* texture;
     int jeu = 0;
     int saut = 0;
@@ -51,8 +54,13 @@ int main(int argc, char** argv) {
     texture = SDL_CreateTextureFromSurface(renderer, fond);
     SDL_FreeSurface(fond);
 
+    sprites= SDL_LoadBMP("C:/Users/Public/imageonline-co-transparentimage.bmp");
+    perso1= SDL_CreateTextureFromSurface(renderer, sprites);
+    SDL_FreeSurface(sprites);
+
 
     SDL_RenderCopy(renderer, texture, NULL, NULL);
+    SDL_RenderCopy(renderer, perso1, NULL, NULL);
     SDL_RenderPresent(renderer);// met a jour le renderer
 
 
@@ -73,6 +81,7 @@ int main(int argc, char** argv) {
                 }
                 side = 1;
             }
+            source.x += 15;
             if (rectangle.x > 1500) {
                 side = 0;
             }
@@ -415,6 +424,7 @@ int main(int argc, char** argv) {
 liens:
 https://wiki.libsdl.org/SDL2/SDL_GetKeyboardState
 https://wiki.libsdl.org/SDL2/SDL_Scancode
+https://transparent.imageonline.co/fr/
 */
 
 
