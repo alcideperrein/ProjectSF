@@ -59,6 +59,12 @@ void affichage(SDL_Texture* texture, SDL_Texture* textureSprite, SDL_Texture* te
     if (*pcoup != 0) {
         SDL_RenderDrawRect(renderer, rectangleCoup);
     }
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+    SDL_RenderFillRect(renderer, barreDeVieRed);
+    SDL_RenderFillRect(renderer, barreDeVieRedDroite);
+    SDL_SetRenderDrawColor(renderer, 255, 255, 0, SDL_ALPHA_OPAQUE);
+    SDL_RenderFillRect(renderer, barreDeVie);
+    SDL_RenderFillRect(renderer, barreDeVieDroite);
     SDL_RenderPresent(renderer);
 }
 
