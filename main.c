@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void affichage(SDL_Texture* texture, SDL_Texture* textureSprite, SDL_Texture* textureSpriteDebout2, SDL_Texture* avancer1, SDL_Texture* avancer2, SDL_Texture* avancer3, SDL_Texture* avancer4, SDL_Texture* avancer5, SDL_Texture*  accroupis ,SDL_Renderer* renderer, SDL_Rect* rectangle, SDL_Rect* destRect1, SDL_Rect* destRect2, SDL_Rect* destRect3, SDL_Rect* rectangleCoup,int *psnick,int *pcoup, int *pcompteur,int *pavancer,int *pcompteurAvancer,SDL_Rect* rectanglePunchingBall)// est définie pour dessiner les éléments du jeu sur la fenêtre. Elle prend en paramètre la texture à afficher, le renderer, les rectangles de base et de coup, et le coup choisit.
+void affichage(SDL_Texture* texture, SDL_Texture* textureSprite, SDL_Texture* textureSpriteDebout2, SDL_Texture* avancer1, SDL_Texture* avancer2, SDL_Texture* avancer3, SDL_Texture* avancer4, SDL_Texture* avancer5, SDL_Texture*  accroupis ,SDL_Renderer* renderer, SDL_Rect* barreDeVie, SDL_Rect* barreDeVieDroite, SDL_Rect* barreDeVieRed, SDL_Rect* barreDeVieRedDroite, SDL_Rect* rectangle, SDL_Rect* destRect1, SDL_Rect* destRect2, SDL_Rect* destRect3, SDL_Rect* rectangleCoup,int *psnick,int *pcoup, int *pcompteur,int *pavancer,int *pcompteurAvancer,SDL_Rect* rectanglePunchingBall)// est définie pour dessiner les éléments du jeu sur la fenêtre. Elle prend en paramètre la texture à afficher, le renderer, les rectangles de base et de coup, et le coup choisit.
 {
     SDL_RenderClear(renderer);
     SDL_RenderCopy(renderer, texture, NULL, NULL);
@@ -76,8 +76,8 @@ int main(int argc, char** argv) {
     SDL_Rect rectangle = { 20, 500, 220, 500 };
     SDL_Rect rectangleCoup = { 0, 0, 0, 100 };
     SDL_Rect rectanglePunchingBall = { 1600, 500, 220, 500 };
-    SDL_Rect barreDeVie = { 160, 80, 680, 40 };
-    SDL_Rect barreDeVieRed = { 160, 80, 700,40 };
+    SDL_Rect barreDeVie = { 80, 80, 680, 40 };
+    SDL_Rect barreDeVieRed = { 80, 80, 700,40 };
     SDL_Rect barreDeVieDroite = { 1180 , 80, 680,40 };
     SDL_Rect barreDeVieRedDroite = { 1160, 80, 700,40 };
     SDL_Rect destRect1;
@@ -484,7 +484,7 @@ int main(int argc, char** argv) {
         destRect3.x = rectangle.x;
         destRect3.y = rectangle.y;
         
-        affichage(texture, textureSprite, textureSpriteDebout2,avancer1, avancer2, avancer3, avancer4, avancer5,accroupis, renderer, &rectangle, &destRect1, &destRect2, &destRect3, &rectangleCoup,&snick ,&coup,&compteur,&avancer,&compteurAvancer, &rectanglePunchingBall);
+        affichage(texture, textureSprite, textureSpriteDebout2,avancer1, avancer2, avancer3, avancer4, avancer5,accroupis, renderer, &barreDeVie,&barreDeVieDroite,&barreDeVieRed,&barreDeVieRedDroite,&rectangle, &destRect1, &destRect2, &destRect3, &rectangleCoup,&snick ,&coup,&compteur,&avancer,&compteurAvancer, &rectanglePunchingBall);
         SDL_PollEvent(&touche2);// Récupération des actions de l'utilisateur
         switch (touche2.type)
         {
