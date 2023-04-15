@@ -4,12 +4,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void affichage(SDL_Texture* texture, SDL_Texture* textureSprite, SDL_Texture* textureSpriteDebout2, SDL_Texture* avancer1, SDL_Texture* avancer2, SDL_Texture* avancer3, SDL_Texture* avancer4, SDL_Texture* avancer5, SDL_Renderer* renderer, SDL_Rect* rectangle, SDL_Rect* destRect1, SDL_Rect* destRect2,  SDL_Rect* rectangleCoup,int *pcoup, int *pcompteur,int *pavancer,int *pcompteurAvancer,SDL_Rect* rectanglePunchingBall)// est définie pour dessiner les éléments du jeu sur la fenêtre. Elle prend en paramètre la texture à afficher, le renderer, les rectangles de base et de coup, et le coup choisit.
+void affichage(SDL_Texture* texture, SDL_Texture* textureSprite, SDL_Texture* textureSpriteDebout2, SDL_Texture* avancer1, SDL_Texture* avancer2, SDL_Texture* avancer3, SDL_Texture* avancer4, SDL_Texture* avancer5, SDL_Texture*  accroupis ,SDL_Renderer* renderer, SDL_Rect* rectangle, SDL_Rect* destRect1, SDL_Rect* destRect2, SDL_Rect* destRect3, SDL_Rect* rectangleCoup,int *psnick,int *pcoup, int *pcompteur,int *pavancer,int *pcompteurAvancer,SDL_Rect* rectanglePunchingBall)// est définie pour dessiner les éléments du jeu sur la fenêtre. Elle prend en paramètre la texture à afficher, le renderer, les rectangles de base et de coup, et le coup choisit.
 {
     SDL_RenderClear(renderer);
     SDL_RenderCopy(renderer, texture, NULL, NULL);
     SDL_RenderCopy(renderer, texture, NULL, destRect1);
-    if (*pavancer == 1)
+    if (*pavancer == 1 && *psnick == 0)
     {
         if (*pcompteurAvancer < 20) {
             SDL_RenderCopy(renderer, avancer1, NULL, destRect2);
@@ -34,8 +34,9 @@ void affichage(SDL_Texture* texture, SDL_Texture* textureSprite, SDL_Texture* te
                 *pcompteurAvancer = 0;
             }
         }
-
-    
+    }
+    else if (*psnick == 1) {
+        SDL_RenderCopy(renderer, accroupis, NULL, destRect3);
     }
     else {
         if (*pcompteur < 80) {
@@ -71,6 +72,7 @@ int main(int argc, char** argv) {
     SDL_Rect rectanglePunchingBall = { 1600, 500, 220, 500 };
     SDL_Rect destRect1;
     SDL_Rect destRect2;
+    SDL_Rect destRect3;
     SDL_Texture* texture;
     SDL_Texture* textureSprite;
     SDL_Texture* textureSpriteDebout2;
@@ -79,6 +81,7 @@ int main(int argc, char** argv) {
     SDL_Texture* avancer3;
     SDL_Texture* avancer4;
     SDL_Texture* avancer5;
+    SDL_Texture* accroupis;
     int jeu = 0;
     int saut = 0;
     int snick = 0;
@@ -110,6 +113,7 @@ int main(int argc, char** argv) {
     avancer3 = IMG_LoadTexture(renderer, "C:/Users/Public/avancer3.png");
     avancer4 = IMG_LoadTexture(renderer, "C:/Users/Public/avancer4.png");
     avancer5 = IMG_LoadTexture(renderer, "C:/Users/Public/avancer5.png");
+    accroupis= IMG_LoadTexture(renderer, "C:/Users/Public/accroupis.png");
 
     
     destRect1.x = 0;
@@ -121,7 +125,10 @@ int main(int argc, char** argv) {
     
     destRect2.x = rectangle.x;
     destRect2.y = rectangle.y;
+    destRect3.x = rectangle.x;
+    destRect3.y = rectangle.y;
     SDL_QueryTexture(textureSprite, NULL, NULL, &destRect2.w, &destRect2.h);
+    SDL_QueryTexture(accroupis, NULL, NULL, &destRect3.w, &destRect3.h);
 
     SDL_RenderClear(renderer);
 
@@ -136,11 +143,7 @@ int main(int argc, char** argv) {
     {
 
         touche = SDL_GetKeyboardState(NULL); // récupérer l'état des touches du clavier
-        if (touche[SDL_SCANCODE_D] == 0 && touche[SDL_SCANCODE_A] == 0 && saut == 0 && snick == 0) {
-            avancer = 0;
-            compteurAvancer = 0;
-        }
-
+        
         if (touche[SDL_SCANCODE_D] && (coup==0) && snick==0){
             if (rectangle.x < 1680)
             {
@@ -178,8 +181,8 @@ int main(int argc, char** argv) {
         }
 
         if ((touche[SDL_SCANCODE_S]) && (saut == 0) && (coup == 0)) {
-            rectangle.y = 750;
-            rectangle.h = 250;
+            rectangle.y = 700;
+            rectangle.h = 300;
             snick = 1;
         }
         if ((touche[SDL_SCANCODE_W]) && (saut == 0) && (snick == 0) && (coup==0))
@@ -214,6 +217,8 @@ int main(int argc, char** argv) {
             rectangle.y = 500;
             rectangle.h = 500;
             snick = 0;
+            avancer = 0;
+            compteurAvancer = 0;
         }
 
 
@@ -460,9 +465,16 @@ int main(int argc, char** argv) {
         }
 
         */
+        if ((touche[SDL_SCANCODE_D] == 0 && touche[SDL_SCANCODE_A] == 0 && saut == 0 && snick == 0)|| (touche[SDL_SCANCODE_D] && touche[SDL_SCANCODE_A]&& saut == 0 && snick == 0)) {
+            avancer = 0;
+            compteurAvancer = 0;
+        }
         destRect2.x = rectangle.x;
         destRect2.y = rectangle.y;
-        affichage(texture, textureSprite, textureSpriteDebout2,avancer1, avancer2, avancer3, avancer4, avancer5, renderer, &rectangle, &destRect1, &destRect2, &rectangleCoup, &coup,&compteur,&avancer,&compteurAvancer, &rectanglePunchingBall);
+        destRect3.x = rectangle.x;
+        destRect3.y = rectangle.y;
+        
+        affichage(texture, textureSprite, textureSpriteDebout2,avancer1, avancer2, avancer3, avancer4, avancer5,accroupis, renderer, &rectangle, &destRect1, &destRect2, &destRect3, &rectangleCoup,&snick ,&coup,&compteur,&avancer,&compteurAvancer, &rectanglePunchingBall);
         SDL_PollEvent(&touche2);// Récupération des actions de l'utilisateur
         switch (touche2.type)
         {
