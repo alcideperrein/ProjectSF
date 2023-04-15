@@ -70,6 +70,10 @@ int main(int argc, char** argv) {
     SDL_Rect rectangle = { 20, 500, 220, 500 };
     SDL_Rect rectangleCoup = { 0, 0, 0, 100 };
     SDL_Rect rectanglePunchingBall = { 1600, 500, 220, 500 };
+    SDL_Rect barreDeVie = { 160, 80, 680, 40 };
+    SDL_Rect barreDeVieRed = { 160, 80, 700,40 };
+    SDL_Rect barreDeVieDroite = { 1180 , 80, 680,40 };
+    SDL_Rect barreDeVieRedDroite = { 1160, 80, 700,40 };
     SDL_Rect destRect1;
     SDL_Rect destRect2;
     SDL_Rect destRect3;
