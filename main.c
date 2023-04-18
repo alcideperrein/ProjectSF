@@ -4,12 +4,58 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void affichage(SDL_Texture* texture, SDL_Texture* textureSprite, SDL_Texture* textureSpriteDebout2, SDL_Texture* avancer1, SDL_Texture* avancer2, SDL_Texture* avancer3, SDL_Texture* avancer4, SDL_Texture* avancer5, SDL_Texture*  accroupis ,SDL_Renderer* renderer, SDL_Rect* barreDeVie, SDL_Rect* barreDeVieDroite, SDL_Rect* barreDeVieRed, SDL_Rect* barreDeVieRedDroite, SDL_Rect* rectangle, SDL_Rect* destRect1, SDL_Rect* destRect2, SDL_Rect* destRect3, SDL_Rect* rectangleCoup,int *psnick,int *pcoup, int *pcompteur,int *pavancer,int *pcompteurAvancer,SDL_Rect* rectanglePunchingBall)// est définie pour dessiner les éléments du jeu sur la fenêtre. Elle prend en paramètre la texture à afficher, le renderer, les rectangles de base et de coup, et le coup choisit.
+void affichage(SDL_Texture* texture, SDL_Texture* textureSprite, SDL_Texture* textureSpriteDebout2, SDL_Texture* avancer1, SDL_Texture* avancer2, SDL_Texture* avancer3, SDL_Texture* avancer4,
+    SDL_Texture* avancer5, SDL_Texture*  accroupis , SDL_Texture* saut1, SDL_Texture* saut2, SDL_Texture* saut3, SDL_Texture* saut4, SDL_Texture* saut5, SDL_Texture* saut6,
+    SDL_Renderer* renderer, SDL_Rect* barreDeVie, SDL_Rect* barreDeVieDroite, SDL_Rect* barreDeVieRed, SDL_Rect* barreDeVieRedDroite,
+    SDL_Rect* rectangle, SDL_Rect* destRect1, SDL_Rect* destRect2, SDL_Rect* destRect3, SDL_Rect* rectangleCoup,int *psnick,int *pcoup, int *pcompteur,int *pavancer,int *pcompteurAvancer,
+    int *pcompteursaut,int *psaut,SDL_Rect* rectanglePunchingBall)// est définie pour dessiner les éléments du jeu sur la fenêtre. Elle prend en paramètre la texture à afficher, le renderer, les rectangles de base et de coup, et le coup choisit.
 {
     SDL_RenderClear(renderer);
     SDL_RenderCopy(renderer, texture, NULL, NULL);
     SDL_RenderCopy(renderer, texture, NULL, destRect1);
-    if (*pavancer == 1 && *psnick == 0)
+    if (*psaut == 1 || *psaut==2)
+    {
+        if (*pcompteursaut < 10)
+        {
+            SDL_RenderCopy(renderer, saut1, NULL, destRect2);
+            *pcompteursaut += 1;
+        }
+        else if (*pcompteursaut < 40)
+        {
+            SDL_RenderCopy(renderer, saut2, NULL, destRect2);
+            *pcompteursaut += 1;
+        }
+        else if (*pcompteursaut < 80)
+        {
+            SDL_RenderCopy(renderer, saut3, NULL, destRect2);
+            *pcompteursaut += 1;
+        }
+        else if (*pcompteursaut < 100)
+        {
+            SDL_RenderCopy(renderer, saut4, NULL, destRect2);
+            *pcompteursaut += 1;
+        }
+        else if (*pcompteursaut < 140)
+        {
+            SDL_RenderCopy(renderer, saut5, NULL, destRect2);
+            *pcompteursaut += 1;
+        }
+        else if (*pcompteursaut < 200)
+        {
+            SDL_RenderCopy(renderer, saut6, NULL, destRect2);
+            *pcompteursaut += 1;
+        }
+        else if (*pcompteursaut < 240)
+        {
+            SDL_RenderCopy(renderer, saut1, NULL, destRect2);
+            *pcompteursaut += 1;
+        }
+    }
+   
+     
+        
+
+    else if (*pavancer == 1 && *psnick == 0)
     {
         if (*pcompteurAvancer < 20) {
             SDL_RenderCopy(renderer, avancer1, NULL, destRect2);
@@ -92,6 +138,12 @@ int main(int argc, char** argv) {
     SDL_Texture* avancer4;
     SDL_Texture* avancer5;
     SDL_Texture* accroupis;
+    SDL_Texture* saut1;
+    SDL_Texture* saut2;
+    SDL_Texture* saut3;
+    SDL_Texture* saut4;
+    SDL_Texture* saut5;
+    SDL_Texture* saut6;
     int jeu = 0;
     int saut = 0;
     int snick = 0;
@@ -101,6 +153,7 @@ int main(int argc, char** argv) {
     int compteur = 0;
     int avancer = 0;
     int compteurAvancer = 0;
+    int compteurSaut = 0;
   
 
     int side = 1;
@@ -116,7 +169,7 @@ int main(int argc, char** argv) {
 
     renderer = SDL_CreateRenderer(pwindow, -1, SDL_RENDERER_SOFTWARE);
     texture = IMG_LoadTexture(renderer, "C:/Users/Public/SFBackground.bmp");
-    textureSprite = IMG_LoadTexture(renderer, "C:/Users/Public/try.png");
+    textureSprite = IMG_LoadTexture(renderer, "C:/Users/Public/Debout.png");
     textureSpriteDebout2= IMG_LoadTexture(renderer, "C:/Users/Public/Debout2.png");
     avancer1= IMG_LoadTexture(renderer, "C:/Users/Public/avancer1.png");
     avancer2 = IMG_LoadTexture(renderer, "C:/Users/Public/avancer2.png");
@@ -124,6 +177,12 @@ int main(int argc, char** argv) {
     avancer4 = IMG_LoadTexture(renderer, "C:/Users/Public/avancer4.png");
     avancer5 = IMG_LoadTexture(renderer, "C:/Users/Public/avancer5.png");
     accroupis= IMG_LoadTexture(renderer, "C:/Users/Public/accroupis.png");
+    saut1 = IMG_LoadTexture(renderer, "C:/Users/Public/saut1.png");
+    saut2= IMG_LoadTexture(renderer, "C:/Users/Public/saut2.png");
+    saut3 = IMG_LoadTexture(renderer, "C:/Users/Public/saut3.png");
+    saut4 = IMG_LoadTexture(renderer, "C:/Users/Public/saut4.png");
+    saut5 = IMG_LoadTexture(renderer, "C:/Users/Public/saut5.png");
+    saut6 = IMG_LoadTexture(renderer, "C:/Users/Public/saut6.png");
 
     
     destRect1.x = 0;
@@ -160,7 +219,7 @@ int main(int argc, char** argv) {
                 if (snick == 0) {
                     rectangle.x += 2;
                 }
-                else {
+                if (saut == 1 ) {
                     rectangle.x += 1;
                 }
                 side = 1;
@@ -178,7 +237,7 @@ int main(int argc, char** argv) {
                 if (snick == 0) {
                     rectangle.x -= 2;
                 }
-                else {
+                if (saut == 1) {
                     rectangle.x -= 1;
                 }
                 side = 2;
@@ -211,14 +270,15 @@ int main(int argc, char** argv) {
             if (rectangle.y < 150) {
                 saut = 2;
             }
-            rectangle.y -= 2;
+            rectangle.y -= 4;
         }
         if (saut == 2) {
             if (rectangle.y < 500) {
-                rectangle.y += 2;
+                rectangle.y += 4;
             }
             else if (rectangle.y == 500) {
                 saut = 0;
+                compteurSaut = 0;
             }
         }
 
@@ -240,13 +300,9 @@ int main(int argc, char** argv) {
                 coupLent=2; // correspond a coup moyen
             }
 
-            if ((side == 1) && (snick == 0) ) {
+            if ((side == 1) && (snick == 0)) {
                 coup = 1;
                 side = 3;// Pour pas qu'il repasse a coup 1
-            }
-            if ((side == 2) && (snick == 0)) {
-                coup = 3;
-                side = 3; // Pour pas qu'il repasse a coup 3
             }
 
             if ((side == 1) && (snick == 1)) {
@@ -254,25 +310,7 @@ int main(int argc, char** argv) {
                 side = 3; // Pour pas qu'il repasse a coup 5
             }
 
-            if ((side == 2) && (snick == 1)) {
-                coup = 7;
-                side = 3; // Pour pas qu'il repasse a coup 7
-            }
         }
-
-        /*if ((touche[SDL_SCANCODE_C]) && (snick == 0) && (retour == 0)) {
-            if ((side == 1) && (saut != 0)) {
-                coup = 9;
-                side = 3;
-                
-            }
-
-            if ((side == 2) && (saut != 0)) {
-                coup = 11;
-                side = 3;
-
-            }
-        }*/
 
          
 
@@ -310,44 +348,7 @@ int main(int argc, char** argv) {
                 coupLent = 0;
             }
         }
-        if ((coup == 3) && (saut == 0)) {// coup de poing gauche
-            rectangleCoup.h = 100;
-            rectangleCoup.x = rectangle.x;
-            rectangleCoup.y = rectangle.y + 100;
-            if (rectangleCoup.w < -220) {
-                coup = 4;
-            }
-            if (coupLent == 1) {
-                rectangleCoup.w -= 2;
-            }
-            else if (coupLent == 2) {
-                rectangleCoup.w -= 3;
-            }
-            
-            else
-            {
-                rectangleCoup.w -= 4;
-            }
-        }
-
-        if ((coup == 4) && (saut == 0)) { // retour coup de point gauche
-            if (coupLent == 1) {
-                rectangleCoup.w += 2;
-            }
-            else if (coupLent == 2) {
-                rectangleCoup.w += 3;
-            }
-            else {
-                rectangleCoup.w += 4;
-            }
-            
-            if (rectangleCoup.w >= 0) {
-                coup = 0;
-                side = 2;
-                coupLent = 0;
-            }
-        }
-
+        
         if ((coup == 5) && (saut == 0)) {  // coup de pied bas droit
             rectangleCoup.h = 100;
             rectangleCoup.x = rectangle.x+rectangle.w;
@@ -385,96 +386,8 @@ int main(int argc, char** argv) {
             
         }
 
-        if ((coup == 7) && (saut == 0)) { // coup de pied bas gauche
-            rectangleCoup.h = 100;
-            rectangleCoup.x = rectangle.x;
-            rectangleCoup.y = rectangle.y + 100;
-            if (rectangleCoup.w < -180) {
-                coup = 8;
-            }
-            if (coupLent == 1) {
-                rectangleCoup.w -= 2;
-            }
-            else if (coupLent == 2) {
-                rectangleCoup.w -= 3;
-            }
-            else {
-                rectangleCoup.w -= 4;
-            }
-            
-
-        }
-
-        if ((coup == 8) && (saut == 0)) { // retour coup de pied bas gauche
-            
-            if (rectangleCoup.w >= 0) {
-                coup = 0;
-                side = 2;
-                coupLent = 0;
-            }
-            if (coupLent == 1) {
-                rectangleCoup.w += 2;
-            }
-            else if (coupLent == 2) {
-                rectangleCoup.w += 3;
-            }
-            else {
-                rectangleCoup.w += 4;
-            }
-            
-        }
 
 
-        /*if ((coup == 9)) { // coup saut
-            rectangleCoup.h = 100;
-            rectangleCoup.x = rectangle.x + rectangle.w;
-            rectangleCoup.y = rectangle.y + 100;
-            if (rectangleCoup.w >= 180) {
-                coup = 10;
-                retour = 1;
-            }
-            rectangleCoup.w += 2;
-
-        }
-
-        if ((coup == 10)) { // retour coup saut
-            rectangleCoup.h = 100;
-            rectangleCoup.x = rectangle.x + rectangle.w;
-            rectangleCoup.y = rectangle.y + 100;
-            rectangleCoup.w -= 2;
-            if (rectangleCoup.w == 0) {
-                coup = 0;
-                side = 1;
-                retour = 0;
-            }
-        }
-
-         if ((coup == 11)) { // coup saut gauche
-            rectangleCoup.h = 100;
-            rectangleCoup.x = rectangle.x;
-            rectangleCoup.y = rectangle.y + 100;
-            if (rectangleCoup.w <= -180) {
-                coup = 12;
-                retour = 2;
-                }
-            rectangleCoup.w -= 2;
-
-            }
-
-        if ((coup == 12)) { // retour coup saut
-            rectangleCoup.h = 100;
-            rectangleCoup.x = rectangle.x;
-            rectangleCoup.y = rectangle.y + 100;
-            rectangleCoup.w += 2;
-            if (rectangleCoup.w <= 0) {
-                coup = 0;
-                side = 2;
-                retour = 0;
-            }
-
-        }
-
-        */
         if ((touche[SDL_SCANCODE_D] == 0 && touche[SDL_SCANCODE_A] == 0 && saut == 0 && snick == 0)|| (touche[SDL_SCANCODE_D] && touche[SDL_SCANCODE_A]&& saut == 0 && snick == 0)) {
             avancer = 0;
             compteurAvancer = 0;
@@ -484,7 +397,11 @@ int main(int argc, char** argv) {
         destRect3.x = rectangle.x;
         destRect3.y = rectangle.y;
         
-        affichage(texture, textureSprite, textureSpriteDebout2,avancer1, avancer2, avancer3, avancer4, avancer5,accroupis, renderer, &barreDeVie,&barreDeVieDroite,&barreDeVieRed,&barreDeVieRedDroite,&rectangle, &destRect1, &destRect2, &destRect3, &rectangleCoup,&snick ,&coup,&compteur,&avancer,&compteurAvancer, &rectanglePunchingBall);
+        affichage(texture, textureSprite, textureSpriteDebout2,avancer1, avancer2, avancer3, avancer4, avancer5,accroupis,saut1, saut2, saut3, saut4, saut5, saut6,
+            renderer, &barreDeVie,&barreDeVieDroite,&barreDeVieRed,&barreDeVieRedDroite,&rectangle, &destRect1, &destRect2, &destRect3, &rectangleCoup,
+            &snick ,&coup,&compteur,&avancer,&compteurAvancer,&compteurSaut,&saut, &rectanglePunchingBall);
+
+
         SDL_PollEvent(&touche2);// Récupération des actions de l'utilisateur
         switch (touche2.type)
         {
