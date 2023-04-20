@@ -250,7 +250,7 @@ int main(int argc, char** argv) {
     SDL_RenderClear(renderer);
 
     SDL_RenderCopy(renderer, texture, NULL, &destRect1);
-    SDL_RenderCopy(renderer, textureSprite, NULL, &destRect2);
+    
 
     SDL_RenderPresent(renderer);
 
@@ -474,6 +474,7 @@ int main(int argc, char** argv) {
                 SDL_DestroyTexture(coupAccroupis1);
                 SDL_DestroyTexture(coupAccroupis2);
                 SDL_DestroyTexture(coupAccroupis3);
+                SDL_DestroyTexture(deboutBot);
                 SDL_DestroyTexture(texture);// detruit la texture
                 SDL_DestroyRenderer(renderer);// detruit le rendu
                 SDL_DestroyWindow(pwindow); // Detruit la fenetre
