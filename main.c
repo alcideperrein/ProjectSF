@@ -392,7 +392,7 @@ int main(int argc, char** argv)
         }
 
 
-        if (((touche[SDL_SCANCODE_C]) || (touche[SDL_SCANCODE_Q]) || (touche[SDL_SCANCODE_E]) || (touche[SDL_SCANCODE_R])) && (saut == 0))
+        if (((touche[SDL_SCANCODE_C]) || (touche[SDL_SCANCODE_Q]) || (touche[SDL_SCANCODE_E]) || ((touche[SDL_SCANCODE_R] && snick==0))) && (saut == 0))
         {
 
             if (touche[SDL_SCANCODE_Q])
@@ -403,7 +403,7 @@ int main(int argc, char** argv)
             {
                 coupLent = 2; // correspond a coup moyen
             }
-            if ((touche[SDL_SCANCODE_R]) &&(side==1)&&(snick==0))
+            if ((touche[SDL_SCANCODE_R]) &&(side==1) &&(snick==0))
             {
                 coupPied = 1; // correspond a coup pied
                 side = 3;
