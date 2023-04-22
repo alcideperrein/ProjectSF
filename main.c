@@ -173,6 +173,27 @@ void affichage(SDL_Texture* texture, SDL_Texture* textureSprite, SDL_Texture* te
     SDL_RenderPresent(renderer);
 }
 
+
+void hitCheck(int* pcoup, int* pcoupLent,int *pcoupPied,int *pdegat, SDL_Rect* rectanglePunchingBall, SDL_Rect* rectangleCoup, SDL_Rect* barreDeVieDroite) {
+    if ((*pcoup == 1 || *pcoup==5 || *pcoupPied==1) && ((rectangleCoup->x + rectangleCoup->w) >= rectanglePunchingBall->x) && *pcoupLent==0 &&*pdegat==0) {
+        barreDeVieDroite->x += 15;
+        barreDeVieDroite->w -= 15;
+        *pdegat = 1;
+    }
+    else if ((*pcoupLent == 1) && ((rectangleCoup->x + rectangleCoup->w) >= rectanglePunchingBall->x) && *pdegat == 0) {
+
+        barreDeVieDroite->x += 20;
+        barreDeVieDroite->w -= 20;
+        *pdegat = 1;
+    }
+    else if ((*pcoupLent == 2) && ((rectangleCoup->x + rectangleCoup->w) >= rectanglePunchingBall->x) && *pdegat == 0) {
+
+        barreDeVieDroite->x += 30;
+        barreDeVieDroite->w -=30;
+        *pdegat = 1;
+    }
+}
+
 int main(int argc, char** argv)
 {
     SDL_Window* pwindow;
@@ -230,6 +251,7 @@ int main(int argc, char** argv)
     int compteurAvancer = 0;
     int compteurSaut = 0;
     int side = 1;
+    int degat = 0;
 
     SDL_Init(SDL_INIT_VIDEO);
     SDL_version nb;
@@ -468,6 +490,7 @@ int main(int argc, char** argv)
                 coup = 0;
                 side = 1;
                 coupLent = 0;
+                degat = 0;
             }
         }
 
@@ -502,6 +525,7 @@ int main(int argc, char** argv)
                 coup = 0;
                 side = 1;
                 coupLent = 0;
+                degat = 0;
             }
             if (coupLent == 1)
             {
@@ -539,6 +563,7 @@ int main(int argc, char** argv)
             {
                 coupPied = 0;
                 side = 1;
+                degat = 0;
             }
         }
 
@@ -558,6 +583,8 @@ int main(int argc, char** argv)
         destRect5.x = rectangle.x;
         destRect5.y = rectangle.y;
 
+
+        hitCheck(&coup, &coupLent,&coupPied,&degat, &rectanglePunchingBall, &rectangleCoup, &barreDeVieDroite);
         affichage(texture, textureSprite, textureSpriteDebout2, avancer1, avancer2, avancer3, avancer4, avancer5, accroupis, saut1, saut2, saut3, saut4, saut5, saut6, coupDebout1, coupDebout2,
             coupDebout3, coupAccroupis1, coupAccroupis2, coupAccroupis3, coupPied1, coupPied2, coupPied3, deboutBot, renderer, &barreDeVie, &barreDeVieDroite, &barreDeVieRed, &barreDeVieRedDroite,
             &rectangle, &destRect1,&destRect2, &destRect3, &destRect4, &destRect5, &destRectBot1, &rectangleCoup, &snick, &coup,&coupPied, &compteur, &avancer, &compteurAvancer, &compteurSaut, &saut,
