@@ -174,19 +174,19 @@ void affichage(SDL_Texture* texture, SDL_Texture* textureSprite, SDL_Texture* te
 }
 
 
-void hitCheck(int* pcoup, int* pcoupLent, int* pcoupPied, int* pdegat, SDL_Rect* rectanglePunchingBall, SDL_Rect* rectangleCoup, SDL_Rect* barreDeVieDroite) {
-    if ((*pcoup == 1 || *pcoup == 5 || *pcoupPied == 1) && ((rectangleCoup->x + rectangleCoup->w) >= rectanglePunchingBall->x) && *pcoupLent == 0 && *pdegat == 0) {
+void hitCheck(int* pcoup, int* pstrikeSpeed, int* pcoupPied, int* pdegat, SDL_Rect* rectanglePunchingBall, SDL_Rect* rectangleCoup, SDL_Rect* barreDeVieDroite) {
+    if ((*pcoup == 1 || *pcoup == 5 || *pcoupPied == 1) && ((rectangleCoup->x + rectangleCoup->w) >= rectanglePunchingBall->x) && *pstrikeSpeed == 0 && *pdegat == 0) {
         barreDeVieDroite->x += 15;
         barreDeVieDroite->w -= 15;
         *pdegat = 1;
     }
-    else if ((*pcoupLent == 1) && ((rectangleCoup->x + rectangleCoup->w) >= rectanglePunchingBall->x) && *pdegat == 0) {
+    else if ((*pstrikeSpeed == 2) && ((rectangleCoup->x + rectangleCoup->w) >= rectanglePunchingBall->x) && *pdegat == 0) {
 
         barreDeVieDroite->x += 20;
         barreDeVieDroite->w -= 20;
         *pdegat = 1;
     }
-    else if ((*pcoupLent == 2) && ((rectangleCoup->x + rectangleCoup->w) >= rectanglePunchingBall->x) && *pdegat == 0) {
+    else if ((*pstrikeSpeed == 1) && ((rectangleCoup->x + rectangleCoup->w) >= rectanglePunchingBall->x) && *pdegat == 0) {
 
         barreDeVieDroite->x += 30;
         barreDeVieDroite->w -= 30;
@@ -245,7 +245,7 @@ int main(int argc, char** argv)
     int coup = 0;
     int coupPied = 0;
     int retour = 0;
-    int coupLent = 0;
+    int strikeSpeed = 0;
     int compteur = 0;
     int avancer = 0;
     int compteurAvancer = 0;
@@ -419,11 +419,11 @@ int main(int argc, char** argv)
 
             if (touche[SDL_SCANCODE_Q])
             {
-                coupLent = 1;
+                strikeSpeed = 1;
             }
             if (touche[SDL_SCANCODE_E])
             {
-                coupLent = 2; // correspond a coup moyen
+                strikeSpeed = 2; // correspond a coup moyen
             }
             if ((touche[SDL_SCANCODE_R]) && (side == 1) && (snick == 0))
             {
@@ -457,11 +457,11 @@ int main(int argc, char** argv)
             {
                 coup = 2;
             }
-            if (coupLent == 1)
+            if (strikeSpeed == 1)
             {
                 rectangleCoup.w += 2;
             }
-            else if (coupLent == 2)
+            else if (strikeSpeed == 2)
             {
                 rectangleCoup.w += 3;
             }
@@ -473,11 +473,11 @@ int main(int argc, char** argv)
         }
         if ((coup == 2) && (saut == 0))   // retour coup de point gauche
         {
-            if (coupLent == 1)
+            if (strikeSpeed == 1)
             {
                 rectangleCoup.w -= 2;
             }
-            else if (coupLent == 2)
+            else if (strikeSpeed == 2)
             {
                 rectangleCoup.w -= 3;
             }
@@ -489,7 +489,7 @@ int main(int argc, char** argv)
             {
                 coup = 0;
                 side = 1;
-                coupLent = 0;
+                strikeSpeed = 0;
                 degat = 0;
             }
         }
@@ -503,11 +503,11 @@ int main(int argc, char** argv)
             {
                 coup = 6;
             }
-            if (coupLent == 1)
+            if (strikeSpeed == 1)
             {
                 rectangleCoup.w += 2;
             }
-            else if (coupLent == 2)
+            else if (strikeSpeed == 2)
             {
                 rectangleCoup.w += 3;
             }
@@ -524,14 +524,14 @@ int main(int argc, char** argv)
             {
                 coup = 0;
                 side = 1;
-                coupLent = 0;
+                strikeSpeed = 0;
                 degat = 0;
             }
-            if (coupLent == 1)
+            if (strikeSpeed == 1)
             {
                 rectangleCoup.w -= 2;
             }
-            else if (coupLent == 2)
+            else if (strikeSpeed == 2)
             {
                 rectangleCoup.w -= 3;
             }
@@ -584,7 +584,7 @@ int main(int argc, char** argv)
         destRect5.y = rectangle.y;
 
 
-        hitCheck(&coup, &coupLent, &coupPied, &degat, &rectanglePunchingBall, &rectangleCoup, &barreDeVieDroite);
+        hitCheck(&coup, &strikeSpeed, &coupPied, &degat, &rectanglePunchingBall, &rectangleCoup, &barreDeVieDroite);
         affichage(texture, textureSprite, textureSpriteDebout2, avancer1, avancer2, avancer3, avancer4, avancer5, accroupis, saut1, saut2, saut3, saut4, saut5, saut6, coupDebout1, coupDebout2,
             coupDebout3, coupAccroupis1, coupAccroupis2, coupAccroupis3, coupPied1, coupPied2, coupPied3, deboutBot, renderer, &barreDeVie, &barreDeVieDroite, &barreDeVieRed, &barreDeVieRedDroite,
             &rectangle, &destRect1, &destRect2, &destRect3, &destRect4, &destRect5, &destRectBot1, &rectangleCoup, &snick, &coup, &coupPied, &compteur, &avancer, &compteurAvancer, &compteurSaut, &saut,
