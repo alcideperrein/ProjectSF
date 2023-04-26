@@ -188,8 +188,8 @@ void hitCheck(int* pcoup, int* pstrikeSpeed, int* pcoupPied, int* pdegat, SDL_Re
     }
     else if ((*pstrikeSpeed == 1) && ((rectangleCoup->x + rectangleCoup->w) >= rectanglePunchingBall->x) && *pdegat == 0) {
 
-        barreDeVieDroite->x += 30;
-        barreDeVieDroite->w -= 30;
+        barreDeVieDroite->x += 40;
+        barreDeVieDroite->w -= 40;
         *pdegat = 1;
     }
 }
