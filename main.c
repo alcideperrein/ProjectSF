@@ -13,7 +13,6 @@ void affichage(SDL_Texture* texture, SDL_Texture* textureSprite, SDL_Texture* te
 {
     SDL_RenderClear(renderer);
     SDL_RenderCopy(renderer, texture, NULL, NULL);
-    SDL_RenderCopy(renderer, texture, NULL, destRect1);
     SDL_RenderCopy(renderer, deboutBot, NULL, destRectBot1);
     if (*psaut == 1 || *psaut == 2)
     {
@@ -194,6 +193,30 @@ void hitCheck(int* pcoup, int* pstrikeSpeed, int* pcoupPied, int* pdegat, SDL_Re
     }
 }
 
+void win(SDL_Rect* rectangle, SDL_Texture* texture, SDL_Texture* win1, SDL_Texture* win2, SDL_Texture* win3, SDL_Renderer* renderer, SDL_Rect* destRect2, SDL_Rect* destRectwin3
+    , int* petapeWin, int* pcompteurWin) {
+    SDL_RenderClear(renderer);
+    SDL_RenderCopy(renderer, texture, NULL, NULL);
+    if (*petapeWin == 0) {
+        SDL_RenderCopy(renderer, win1, NULL, destRect2);
+        *pcompteurWin += 1;
+        if (*pcompteurWin > 100) {
+            *petapeWin = 1;
+        }
+    }
+    else if (*petapeWin == 1) {
+        SDL_RenderCopy(renderer, win2, NULL, destRect2);
+        *pcompteurWin += 1;
+        if (*pcompteurWin > 150) {
+            *petapeWin = 2;
+        }
+    }
+    else {
+        SDL_RenderCopy(renderer, win3, NULL, destRectwin3);
+    }
+    SDL_RenderPresent(renderer);
+}
+
 int main(int argc, char** argv)
 {
     SDL_Window* pwindow;
@@ -213,6 +236,7 @@ int main(int argc, char** argv)
     SDL_Rect destRect4;
     SDL_Rect destRect5;
     SDL_Rect destRectBot1;
+    SDL_Rect destRectwin3;
     SDL_Texture* texture;
     SDL_Texture* textureSprite;
     SDL_Texture* textureSpriteDebout2;
@@ -238,6 +262,9 @@ int main(int argc, char** argv)
     SDL_Texture* coupPied2;
     SDL_Texture* coupPied3;
     SDL_Texture* deboutBot;
+    SDL_Texture* win1;
+    SDL_Texture* win2;
+    SDL_Texture* win3;
 
     int jeu = 0;
     int saut = 0;
@@ -252,6 +279,8 @@ int main(int argc, char** argv)
     int compteurSaut = 0;
     int side = 1;
     int degat = 0;
+    int etape = 0;
+    int compteurWin = 0;
 
     SDL_Init(SDL_INIT_VIDEO);
     SDL_version nb;
@@ -288,6 +317,9 @@ int main(int argc, char** argv)
     coupPied2 = IMG_LoadTexture(renderer, "C:/Users/Public/coupPied2.png");
     coupPied3 = IMG_LoadTexture(renderer, "C:/Users/Public/coupPied3.png");
     deboutBot = IMG_LoadTexture(renderer, "C:/Users/Public/deboutBot.png");
+    win1 = IMG_LoadTexture(renderer, "C:/Users/Public/win1.png");
+    win2 = IMG_LoadTexture(renderer, "C:/Users/Public/win2.png");
+    win3 = IMG_LoadTexture(renderer, "C:/Users/Public/win3.png");
 
     destRect1.x = 0;
     destRect1.y = 0;
@@ -304,6 +336,8 @@ int main(int argc, char** argv)
     destRect4.y = rectangle.y;
     destRect5.x = rectangle.x;
     destRect5.y = rectangle.y;
+    destRectwin3.x = rectangle.x;
+    destRectwin3.y = rectangle.y;
     destRectBot1.x = rectanglePunchingBall.x;
     destRectBot1.y = rectanglePunchingBall.y;
 
@@ -312,6 +346,7 @@ int main(int argc, char** argv)
     SDL_QueryTexture(coupDebout3, NULL, NULL, &destRect4.w, &destRect4.h);
     SDL_QueryTexture(coupAccroupis3, NULL, NULL, &destRect5.w, &destRect5.h);
     SDL_QueryTexture(deboutBot, NULL, NULL, &destRectBot1.w, &destRectBot1.h);
+    SDL_QueryTexture(win3, NULL, NULL, &destRectwin3.w, &destRectwin3.h);
 
     SDL_RenderClear(renderer);
 
@@ -582,13 +617,20 @@ int main(int argc, char** argv)
         destRect4.y = rectangle.y;
         destRect5.x = rectangle.x;
         destRect5.y = rectangle.y;
+        destRectwin3.x = rectangle.x;
+        destRectwin3.y = rectangle.y;
 
 
         hitCheck(&coup, &strikeSpeed, &coupPied, &degat, &rectanglePunchingBall, &rectangleCoup, &barreDeVieDroite);
-        affichage(texture, textureSprite, textureSpriteDebout2, avancer1, avancer2, avancer3, avancer4, avancer5, accroupis, saut1, saut2, saut3, saut4, saut5, saut6, coupDebout1, coupDebout2,
-            coupDebout3, coupAccroupis1, coupAccroupis2, coupAccroupis3, coupPied1, coupPied2, coupPied3, deboutBot, renderer, &barreDeVie, &barreDeVieDroite, &barreDeVieRed, &barreDeVieRedDroite,
-            &rectangle, &destRect1, &destRect2, &destRect3, &destRect4, &destRect5, &destRectBot1, &rectangleCoup, &snick, &coup, &coupPied, &compteur, &avancer, &compteurAvancer, &compteurSaut, &saut,
-            &rectanglePunchingBall);
+        if (barreDeVieDroite.w <= 0) {
+            win(&rectangle, texture, win1, win2, win3, renderer, &destRect2, &destRectwin3, &etape, &compteurWin);
+        }
+        else {
+            affichage(texture, textureSprite, textureSpriteDebout2, avancer1, avancer2, avancer3, avancer4, avancer5, accroupis, saut1, saut2, saut3, saut4, saut5, saut6, coupDebout1, coupDebout2,
+                coupDebout3, coupAccroupis1, coupAccroupis2, coupAccroupis3, coupPied1, coupPied2, coupPied3, deboutBot, renderer, &barreDeVie, &barreDeVieDroite, &barreDeVieRed, &barreDeVieRedDroite,
+                &rectangle, &destRect1, &destRect2, &destRect3, &destRect4, &destRect5, &destRectBot1, &rectangleCoup, &snick, &coup, &coupPied, &compteur, &avancer, &compteurAvancer, &compteurSaut, &saut,
+                &rectanglePunchingBall);
+        }
 
 
         SDL_PollEvent(&touche2);// Récupération des actions de l'utilisateur
@@ -622,6 +664,9 @@ int main(int argc, char** argv)
                 SDL_DestroyTexture(coupPied2);
                 SDL_DestroyTexture(coupPied3);
                 SDL_DestroyTexture(deboutBot);
+                SDL_DestroyTexture(win1);
+                SDL_DestroyTexture(win2);
+                SDL_DestroyTexture(win3);
                 SDL_DestroyTexture(texture);// detruit la texture
                 SDL_DestroyRenderer(renderer);// detruit le rendu
                 SDL_DestroyWindow(pwindow); // Detruit la fenetre
