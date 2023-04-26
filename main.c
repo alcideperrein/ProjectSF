@@ -7,9 +7,9 @@
 void affichage(SDL_Texture* texture, SDL_Texture* textureSprite, SDL_Texture* textureSpriteDebout2, SDL_Texture* avancer1, SDL_Texture* avancer2, SDL_Texture* avancer3, SDL_Texture* avancer4,
     SDL_Texture* avancer5, SDL_Texture* accroupis, SDL_Texture* saut1, SDL_Texture* saut2, SDL_Texture* saut3, SDL_Texture* saut4, SDL_Texture* saut5, SDL_Texture* saut6,
     SDL_Texture* coupDebout1, SDL_Texture* coupDebout2, SDL_Texture* coupDebout3, SDL_Texture* coupAccroupis1, SDL_Texture* coupAccroupis2, SDL_Texture* coupAccroupis3, SDL_Texture* coupPied1,
-    SDL_Texture* coupPied2,SDL_Texture* coupPied3, SDL_Texture* deboutBot,SDL_Renderer* renderer, SDL_Rect* barreDeVie, SDL_Rect* barreDeVieDroite, SDL_Rect* barreDeVieRed,
-    SDL_Rect* barreDeVieRedDroite, SDL_Rect* rectangle, SDL_Rect* destRect1,SDL_Rect* destRect2, SDL_Rect* destRect3, SDL_Rect* destRect4, SDL_Rect* destRect5, SDL_Rect* destRectBot1,
-    SDL_Rect* rectangleCoup, int* psnick, int* pcoup, int* pcoupPied,int* pcompteur, int* pavancer, int* pcompteurAvancer,int* pcompteursaut, int* psaut, SDL_Rect* rectanglePunchingBall)// est définie pour dessiner les éléments du jeu sur la fenêtre. Elle prend en paramètre la texture à afficher, le renderer, les rectangles de base et de coup, et le coup choisit.
+    SDL_Texture* coupPied2, SDL_Texture* coupPied3, SDL_Texture* deboutBot, SDL_Renderer* renderer, SDL_Rect* barreDeVie, SDL_Rect* barreDeVieDroite, SDL_Rect* barreDeVieRed,
+    SDL_Rect* barreDeVieRedDroite, SDL_Rect* rectangle, SDL_Rect* destRect1, SDL_Rect* destRect2, SDL_Rect* destRect3, SDL_Rect* destRect4, SDL_Rect* destRect5, SDL_Rect* destRectBot1,
+    SDL_Rect* rectangleCoup, int* psnick, int* pcoup, int* pcoupPied, int* pcompteur, int* pavancer, int* pcompteurAvancer, int* pcompteursaut, int* psaut, SDL_Rect* rectanglePunchingBall)// est définie pour dessiner les éléments du jeu sur la fenêtre. Elle prend en paramètre la texture à afficher, le renderer, les rectangles de base et de coup, et le coup choisit.
 {
     SDL_RenderClear(renderer);
     SDL_RenderCopy(renderer, texture, NULL, NULL);
@@ -160,7 +160,7 @@ void affichage(SDL_Texture* texture, SDL_Texture* textureSprite, SDL_Texture* te
     SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);
     SDL_RenderDrawRect(renderer, rectangle);
     SDL_RenderDrawRect(renderer, rectanglePunchingBall);
-    if ((*pcoup != 0) || (*pcoupPied!=0))
+    if ((*pcoup != 0) || (*pcoupPied != 0))
     {
         SDL_RenderDrawRect(renderer, rectangleCoup);
     }
@@ -174,22 +174,22 @@ void affichage(SDL_Texture* texture, SDL_Texture* textureSprite, SDL_Texture* te
 }
 
 
-void hitCheck(int* pcoup, int* pcoupLent,int *pcoupPied,int *pdegat, SDL_Rect* rectanglePunchingBall, SDL_Rect* rectangleCoup, SDL_Rect* barreDeVieDroite) {
-    if ((*pcoup == 1 || *pcoup==5 || *pcoupPied==1) && ((rectangleCoup->x + rectangleCoup->w) >= rectanglePunchingBall->x) && *pcoupLent==0 &&*pdegat==0) {
+void hitCheck(int* pcoup, int* pstrikeSpeed, int* pcoupPied, int* pdegat, SDL_Rect* rectanglePunchingBall, SDL_Rect* rectangleCoup, SDL_Rect* barreDeVieDroite) {
+    if ((*pcoup == 1 || *pcoup == 5 || *pcoupPied == 1) && ((rectangleCoup->x + rectangleCoup->w) >= rectanglePunchingBall->x) && *pstrikeSpeed == 0 && *pdegat == 0) {
         barreDeVieDroite->x += 15;
         barreDeVieDroite->w -= 15;
         *pdegat = 1;
     }
-    else if ((*pcoupLent == 1) && ((rectangleCoup->x + rectangleCoup->w) >= rectanglePunchingBall->x) && *pdegat == 0) {
+    else if ((*pstrikeSpeed == 2) && ((rectangleCoup->x + rectangleCoup->w) >= rectanglePunchingBall->x) && *pdegat == 0) {
 
         barreDeVieDroite->x += 20;
         barreDeVieDroite->w -= 20;
         *pdegat = 1;
     }
-    else if ((*pcoupLent == 2) && ((rectangleCoup->x + rectangleCoup->w) >= rectanglePunchingBall->x) && *pdegat == 0) {
+    else if ((*pstrikeSpeed == 1) && ((rectangleCoup->x + rectangleCoup->w) >= rectanglePunchingBall->x) && *pdegat == 0) {
 
         barreDeVieDroite->x += 30;
-        barreDeVieDroite->w -=30;
+        barreDeVieDroite->w -= 30;
         *pdegat = 1;
     }
 }
@@ -245,7 +245,7 @@ int main(int argc, char** argv)
     int coup = 0;
     int coupPied = 0;
     int retour = 0;
-    int coupLent = 0;
+    int strikeSpeed = 0;
     int compteur = 0;
     int avancer = 0;
     int compteurAvancer = 0;
@@ -414,18 +414,18 @@ int main(int argc, char** argv)
         }
 
 
-        if (((touche[SDL_SCANCODE_C]) || (touche[SDL_SCANCODE_Q]) || (touche[SDL_SCANCODE_E]) || ((touche[SDL_SCANCODE_R] && snick==0))) && (saut == 0))
+        if (((touche[SDL_SCANCODE_C]) || (touche[SDL_SCANCODE_Q]) || (touche[SDL_SCANCODE_E]) || ((touche[SDL_SCANCODE_R] && snick == 0))) && (saut == 0))
         {
 
             if (touche[SDL_SCANCODE_Q])
             {
-                coupLent = 1;
+                strikeSpeed = 1;
             }
             if (touche[SDL_SCANCODE_E])
             {
-                coupLent = 2; // correspond a coup moyen
+                strikeSpeed = 2; // correspond a coup moyen
             }
-            if ((touche[SDL_SCANCODE_R]) &&(side==1) &&(snick==0))
+            if ((touche[SDL_SCANCODE_R]) && (side == 1) && (snick == 0))
             {
                 coupPied = 1; // correspond a coup pied
                 side = 3;
@@ -457,11 +457,11 @@ int main(int argc, char** argv)
             {
                 coup = 2;
             }
-            if (coupLent == 1)
+            if (strikeSpeed == 1)
             {
                 rectangleCoup.w += 2;
             }
-            else if (coupLent == 2)
+            else if (strikeSpeed == 2)
             {
                 rectangleCoup.w += 3;
             }
@@ -473,11 +473,11 @@ int main(int argc, char** argv)
         }
         if ((coup == 2) && (saut == 0))   // retour coup de point gauche
         {
-            if (coupLent == 1)
+            if (strikeSpeed == 1)
             {
                 rectangleCoup.w -= 2;
             }
-            else if (coupLent == 2)
+            else if (strikeSpeed == 2)
             {
                 rectangleCoup.w -= 3;
             }
@@ -489,7 +489,7 @@ int main(int argc, char** argv)
             {
                 coup = 0;
                 side = 1;
-                coupLent = 0;
+                strikeSpeed = 0;
                 degat = 0;
             }
         }
@@ -503,11 +503,11 @@ int main(int argc, char** argv)
             {
                 coup = 6;
             }
-            if (coupLent == 1)
+            if (strikeSpeed == 1)
             {
                 rectangleCoup.w += 2;
             }
-            else if (coupLent == 2)
+            else if (strikeSpeed == 2)
             {
                 rectangleCoup.w += 3;
             }
@@ -524,14 +524,14 @@ int main(int argc, char** argv)
             {
                 coup = 0;
                 side = 1;
-                coupLent = 0;
+                strikeSpeed = 0;
                 degat = 0;
             }
-            if (coupLent == 1)
+            if (strikeSpeed == 1)
             {
                 rectangleCoup.w -= 2;
             }
-            else if (coupLent == 2)
+            else if (strikeSpeed == 2)
             {
                 rectangleCoup.w -= 3;
             }
@@ -584,10 +584,10 @@ int main(int argc, char** argv)
         destRect5.y = rectangle.y;
 
 
-        hitCheck(&coup, &coupLent,&coupPied,&degat, &rectanglePunchingBall, &rectangleCoup, &barreDeVieDroite);
+        hitCheck(&coup, &strikeSpeed, &coupPied, &degat, &rectanglePunchingBall, &rectangleCoup, &barreDeVieDroite);
         affichage(texture, textureSprite, textureSpriteDebout2, avancer1, avancer2, avancer3, avancer4, avancer5, accroupis, saut1, saut2, saut3, saut4, saut5, saut6, coupDebout1, coupDebout2,
             coupDebout3, coupAccroupis1, coupAccroupis2, coupAccroupis3, coupPied1, coupPied2, coupPied3, deboutBot, renderer, &barreDeVie, &barreDeVieDroite, &barreDeVieRed, &barreDeVieRedDroite,
-            &rectangle, &destRect1,&destRect2, &destRect3, &destRect4, &destRect5, &destRectBot1, &rectangleCoup, &snick, &coup,&coupPied, &compteur, &avancer, &compteurAvancer, &compteurSaut, &saut,
+            &rectangle, &destRect1, &destRect2, &destRect3, &destRect4, &destRect5, &destRectBot1, &rectangleCoup, &snick, &coup, &coupPied, &compteur, &avancer, &compteurAvancer, &compteurSaut, &saut,
             &rectanglePunchingBall);
 
 
