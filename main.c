@@ -194,7 +194,7 @@ void hitCheck(int* pcoup, int* pstrikeSpeed, int* pcoupPied, int* pdegat, SDL_Re
 }
 
 void win(SDL_Rect* rectangle, SDL_Texture* texture, SDL_Texture* win1, SDL_Texture* win2, SDL_Texture* win3, SDL_Renderer* renderer, SDL_Rect* destRect2, SDL_Rect* destRectwin3
-    ,int* petapeWin, int* pcompteurWin) {
+    , int* petapeWin, int* pcompteurWin) {
     if (rectangle->y != 500) { // rectangle->y == rectangle.y different car pointeur
         rectangle->y = 500;
         rectangle->h = 500;
@@ -222,7 +222,7 @@ void win(SDL_Rect* rectangle, SDL_Texture* texture, SDL_Texture* win1, SDL_Textu
     SDL_RenderPresent(renderer);// affiche le rendu
 }
 
-void jeu(int *pjouer) {
+void jeu(int* pjouer) {
     SDL_Window* pwindow;
     SDL_Renderer* renderer;
     Uint8 const* touche;
@@ -324,7 +324,7 @@ void jeu(int *pjouer) {
     win2 = IMG_LoadTexture(renderer, "C:/Users/Public/win2.png");
     win3 = IMG_LoadTexture(renderer, "C:/Users/Public/win3.png");
 
-   
+
     destRect2.x = rectangle.x;// le rectangle ou on va afficher le sprite prend la valeur du rectangle de la hitbox perso
     destRect2.y = rectangle.y;
     destRect3.x = rectangle.x;
@@ -359,7 +359,7 @@ void jeu(int *pjouer) {
 
         touche = SDL_GetKeyboardState(NULL); // récupérer l'état des touches du clavier
 
-        if (touche[SDL_SCANCODE_D] && (coup == 0) && (coupPied == 0) && snick == 0) // aller a gauche
+        if (touche[SDL_SCANCODE_D] && (coup == 0) && (coupPied == 0) && snick == 0 && compteurWin == 0) // aller a gauche
         {
             if (rectangle.x < 1680)
             {
@@ -376,7 +376,7 @@ void jeu(int *pjouer) {
             avancer = 1;
         }
 
-        if (touche[SDL_SCANCODE_A] && (coup == 0) && (coupPied == 0) && snick == 0) // aller a gauche
+        if (touche[SDL_SCANCODE_A] && (coup == 0) && (coupPied == 0) && snick == 0 && compteurWin == 0) // aller a gauche
         {
 
             if (rectangle.x > 20)
@@ -721,8 +721,8 @@ int main(int argc, char** argv)
     while (jouer == 0) { // permet de pouvoir recommencer le jeu tant que jouer == 0
         jeu(&jouer);
     }
-    
-    
+
+
     return 0;
 }
 
