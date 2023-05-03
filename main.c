@@ -11,14 +11,14 @@ void affichage(SDL_Texture* texture, SDL_Texture* textureSprite, SDL_Texture* te
     SDL_Rect* barreDeVieRedDroite, SDL_Rect* rectangle, SDL_Rect* destRect1, SDL_Rect* destRect2, SDL_Rect* destRect3, SDL_Rect* destRect4, SDL_Rect* destRect5, SDL_Rect* destRectBot1,
     SDL_Rect* rectangleCoup, int* psnick, int* pcoup, int* pcoupPied, int* pcompteur, int* pavancer, int* pcompteurAvancer, int* pcompteursaut, int* psaut, SDL_Rect* rectanglePunchingBall)// est définie pour dessiner les éléments du jeu sur la fenêtre. Elle prend en paramètre la texture à afficher, le renderer, les rectangles de base et de coup, et le coup choisit.
 {
-    SDL_RenderClear(renderer);
-    SDL_RenderCopy(renderer, texture, NULL, NULL);
-    SDL_RenderCopy(renderer, deboutBot, NULL, destRectBot1);
+    SDL_RenderClear(renderer); // efface le rendu
+    SDL_RenderCopy(renderer, texture, NULL, NULL); // charge la texture sur le rendu
+    SDL_RenderCopy(renderer, deboutBot, NULL, destRectBot1);// charge la texture qui sera mise aux coordonée de destRectBot1
     if (*psaut == 1 || *psaut == 2)
     {
-        if (*pcompteursaut < 10)
+        if (*pcompteursaut < 10) // permet de gerer l'animation compte le nombre de fois ou rentre dans la fonction pour gérer affichage 
         {
-            SDL_RenderCopy(renderer, saut1, NULL, destRect2);
+            SDL_RenderCopy(renderer, saut1, NULL, destRect2);// charge la texture qui sera mise aux coordonée de destRect2
             *pcompteursaut += 1;
         }
         else if (*pcompteursaut < 40)
@@ -56,7 +56,7 @@ void affichage(SDL_Texture* texture, SDL_Texture* textureSprite, SDL_Texture* te
 
     else if (*pcoup != 0 && *psnick == 0)
     {
-        if (rectangleCoup->w < 50)
+        if (rectangleCoup->w < 50)//rectangleCoup->w = rectangleCoup.w pour les pointeurs
         {
             SDL_RenderCopy(renderer, coupDebout1, NULL, destRect2);
         }
@@ -104,7 +104,7 @@ void affichage(SDL_Texture* texture, SDL_Texture* textureSprite, SDL_Texture* te
 
     else if (*pavancer == 1 && *psnick == 0)
     {
-        if (*pcompteurAvancer < 20)
+        if (*pcompteurAvancer < 20) // permet de gerer l'animation compte le nombre de fois ou rentre dans la fonction pour gérer affichage 
         {
             SDL_RenderCopy(renderer, avancer1, NULL, destRect2);
             *pcompteurAvancer += 1;
@@ -156,20 +156,20 @@ void affichage(SDL_Texture* texture, SDL_Texture* textureSprite, SDL_Texture* te
         }
     }
 
-    SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);
-    SDL_RenderDrawRect(renderer, rectangle);
+    SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);// choisit la couleur
+    SDL_RenderDrawRect(renderer, rectangle);// dessine le rectangle pour la couleur choisit (SDL_RenderDrawRect rectangle vide,SDL_RenderFillRect rectangle plein)
     SDL_RenderDrawRect(renderer, rectanglePunchingBall);
     if ((*pcoup != 0) || (*pcoupPied != 0))
     {
         SDL_RenderDrawRect(renderer, rectangleCoup);
     }
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
-    SDL_RenderFillRect(renderer, barreDeVieRed);
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);// choisit la couleur
+    SDL_RenderFillRect(renderer, barreDeVieRed);// dessine le rectangle en plein pour la couleur choisit ( SDL_RenderDrawRect rectangle vide,SDL_RenderFillRect rectangle plein)
     SDL_RenderFillRect(renderer, barreDeVieRedDroite);
     SDL_SetRenderDrawColor(renderer, 255, 255, 0, SDL_ALPHA_OPAQUE);
     SDL_RenderFillRect(renderer, barreDeVie);
     SDL_RenderFillRect(renderer, barreDeVieDroite);
-    SDL_RenderPresent(renderer);
+    SDL_RenderPresent(renderer);// affiche le rendu
 }
 
 
@@ -177,7 +177,7 @@ void hitCheck(int* pcoup, int* pstrikeSpeed, int* pcoupPied, int* pdegat, SDL_Re
     if ((*pcoup == 1 || *pcoup == 5 || *pcoupPied == 1) && ((rectangleCoup->x + rectangleCoup->w) >= rectanglePunchingBall->x) && *pstrikeSpeed == 0 && *pdegat == 0) {
         barreDeVieDroite->x += 15;
         barreDeVieDroite->w -= 15;
-        *pdegat = 1;
+        *pdegat = 1;// permet de mettre une seul fois le degat par coup touche
     }
     else if ((*pstrikeSpeed == 2) && ((rectangleCoup->x + rectangleCoup->w) >= rectanglePunchingBall->x) && *pdegat == 0) {
 
@@ -195,12 +195,17 @@ void hitCheck(int* pcoup, int* pstrikeSpeed, int* pcoupPied, int* pdegat, SDL_Re
 
 void win(SDL_Rect* rectangle, SDL_Texture* texture, SDL_Texture* win1, SDL_Texture* win2, SDL_Texture* win3, SDL_Renderer* renderer, SDL_Rect* destRect2, SDL_Rect* destRectwin3
     , int* petapeWin, int* pcompteurWin) {
-    SDL_RenderClear(renderer);
+    if (rectangle->y != 500) { // rectangle->y == rectangle.y different car pointeur
+        rectangle->y = 500;
+        rectangle->h = 500;
+
+    }
+    SDL_RenderClear(renderer);// efface le rendu 
     SDL_RenderCopy(renderer, texture, NULL, NULL);
     if (*petapeWin == 0) {
-        SDL_RenderCopy(renderer, win1, NULL, destRect2);
+        SDL_RenderCopy(renderer, win1, NULL, destRect2);// charge la texture qui sera mise aux coordonée de destRect2
         *pcompteurWin += 1;
-        if (*pcompteurWin > 100) {
+        if (*pcompteurWin > 100) { // permet de gerer l'animation compte le nombre de fois ou rentre dans la fonction pour gérer affichage 
             *petapeWin = 1;
         }
     }
@@ -214,22 +219,21 @@ void win(SDL_Rect* rectangle, SDL_Texture* texture, SDL_Texture* win1, SDL_Textu
     else {
         SDL_RenderCopy(renderer, win3, NULL, destRectwin3);
     }
-    SDL_RenderPresent(renderer);
+    SDL_RenderPresent(renderer);// affiche le rendu
 }
 
-int main(int argc, char** argv)
-{
+void jeu(int* pjouer) {
     SDL_Window* pwindow;
     SDL_Renderer* renderer;
     Uint8 const* touche;
     SDL_Event touche2;
-    SDL_Rect rectangle = { 20, 500, 220, 500 };
+    SDL_Rect rectangle = { 20, 500, 220, 500 };// {x,y,w,h}
     SDL_Rect rectangleCoup = { 0, 0, 0, 100 };
     SDL_Rect rectanglePunchingBall = { 1600, 500, 220, 500 };
-    SDL_Rect barreDeVie = { 80, 80, 680, 40 };
+    SDL_Rect barreDeVie = { 80, 80, 700, 40 };
     SDL_Rect barreDeVieRed = { 80, 80, 700,40 };
     SDL_Rect barreDeVieDroite = { 1180, 80, 680,40 };
-    SDL_Rect barreDeVieRedDroite = { 1160, 80, 700,40 };
+    SDL_Rect barreDeVieRedDroite = { 1180, 80, 680,40 };
     SDL_Rect destRect1;
     SDL_Rect destRect2;
     SDL_Rect destRect3;
@@ -271,7 +275,6 @@ int main(int argc, char** argv)
     int snick = 0;
     int coup = 0;
     int coupPied = 0;
-    int retour = 0;
     int strikeSpeed = 0;
     int compteur = 0;
     int avancer = 0;
@@ -282,7 +285,7 @@ int main(int argc, char** argv)
     int etape = 0;
     int compteurWin = 0;
 
-    SDL_Init(SDL_INIT_VIDEO);
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER);
     SDL_version nb;
     SDL_VERSION(&nb);
     pwindow = SDL_CreateWindow("test", SDL_WINDOWPOS_UNDEFINED,
@@ -291,8 +294,8 @@ int main(int argc, char** argv)
         1080,
         SDL_WINDOW_FULLSCREEN);// Cree la fenêtre de dimension 1920px par 1080px en fullscreen
 
-    renderer = SDL_CreateRenderer(pwindow, -1, SDL_RENDERER_SOFTWARE);
-    texture = IMG_LoadTexture(renderer, "C:/Users/Public/SFBackground.bmp");
+    renderer = SDL_CreateRenderer(pwindow, -1, SDL_RENDERER_SOFTWARE); // creer un rendu
+    texture = IMG_LoadTexture(renderer, "C:/Users/Public/SFBackground.bmp"); // telecharger la texture (IMG_LoadTexture besoin de SLD_Image)
     textureSprite = IMG_LoadTexture(renderer, "C:/Users/Public/Debout.png");
     textureSpriteDebout2 = IMG_LoadTexture(renderer, "C:/Users/Public/Debout2.png");
     avancer1 = IMG_LoadTexture(renderer, "C:/Users/Public/avancer1.png");
@@ -321,14 +324,8 @@ int main(int argc, char** argv)
     win2 = IMG_LoadTexture(renderer, "C:/Users/Public/win2.png");
     win3 = IMG_LoadTexture(renderer, "C:/Users/Public/win3.png");
 
-    destRect1.x = 0;
-    destRect1.y = 0;
-    destRect1.w = 1920;
-    destRect1.h = 1080;
 
-
-
-    destRect2.x = rectangle.x;
+    destRect2.x = rectangle.x;// le rectangle ou on va afficher le sprite prend la valeur du rectangle de la hitbox perso
     destRect2.y = rectangle.y;
     destRect3.x = rectangle.x;
     destRect3.y = rectangle.y;
@@ -338,22 +335,22 @@ int main(int argc, char** argv)
     destRect5.y = rectangle.y;
     destRectwin3.x = rectangle.x;
     destRectwin3.y = rectangle.y;
-    destRectBot1.x = rectanglePunchingBall.x;
+    destRectBot1.x = rectanglePunchingBall.x;// le rectangle ou on va afficher le sprite prend la valeur du rectangle de la hitbox punchingball
     destRectBot1.y = rectanglePunchingBall.y;
 
-    SDL_QueryTexture(textureSprite, NULL, NULL, &destRect2.w, &destRect2.h);
+    SDL_QueryTexture(textureSprite, NULL, NULL, &destRect2.w, &destRect2.h);// permet que la hauteur et la largeur du rectangle correspondent a celle du sprite
     SDL_QueryTexture(accroupis, NULL, NULL, &destRect3.w, &destRect3.h);
     SDL_QueryTexture(coupDebout3, NULL, NULL, &destRect4.w, &destRect4.h);
     SDL_QueryTexture(coupAccroupis3, NULL, NULL, &destRect5.w, &destRect5.h);
     SDL_QueryTexture(deboutBot, NULL, NULL, &destRectBot1.w, &destRectBot1.h);
     SDL_QueryTexture(win3, NULL, NULL, &destRectwin3.w, &destRectwin3.h);
 
-    SDL_RenderClear(renderer);
+    SDL_RenderClear(renderer); // efface le rendu 
 
-    SDL_RenderCopy(renderer, texture, NULL, &destRect1);
+    SDL_RenderCopy(renderer, texture, NULL, &destRect1);// charge la texture sur le rendu
 
 
-    SDL_RenderPresent(renderer);
+    SDL_RenderPresent(renderer);//affiche un rendu 
 
 
 
@@ -362,7 +359,7 @@ int main(int argc, char** argv)
 
         touche = SDL_GetKeyboardState(NULL); // récupérer l'état des touches du clavier
 
-        if (touche[SDL_SCANCODE_D] && (coup == 0) && (coupPied == 0) && snick == 0)
+        if (touche[SDL_SCANCODE_D] && (coup == 0) && (coupPied == 0) && snick == 0) // aller a gauche
         {
             if (rectangle.x < 1680)
             {
@@ -379,7 +376,7 @@ int main(int argc, char** argv)
             avancer = 1;
         }
 
-        if (touche[SDL_SCANCODE_A] && (coup == 0) && (coupPied == 0) && snick == 0)
+        if (touche[SDL_SCANCODE_A] && (coup == 0) && (coupPied == 0) && snick == 0) // aller a gauche
         {
 
             if (rectangle.x > 20)
@@ -397,13 +394,13 @@ int main(int argc, char** argv)
 
         }
 
-        if ((touche[SDL_SCANCODE_S]) && (saut == 0) && (coup == 0) && (coupPied == 0))
+        if ((touche[SDL_SCANCODE_S]) && (saut == 0) && (coup == 0) && (coupPied == 0)) // quand on appui sur la touche pour se baisser
         {
             rectangle.y = 700;
             rectangle.h = 300;
             snick = 1;
         }
-        if ((touche[SDL_SCANCODE_W]) && (saut == 0) && (snick == 0) && (coup == 0) && (coupPied == 0))
+        if ((touche[SDL_SCANCODE_W]) && (saut == 0) && (snick == 0) && (coup == 0) && (coupPied == 0))// quand on appui sur la touche pour sauter
         {
             if (rectangle.y > 130)
             {
@@ -439,7 +436,7 @@ int main(int argc, char** argv)
         }
 
 
-        if ((touche[SDL_SCANCODE_S] == 0) && (snick == 1) && (saut == 0) && (coup == 0))
+        if ((touche[SDL_SCANCODE_S] == 0) && (snick == 1) && (saut == 0) && (coup == 0)) // quand on lache la touche pour se relever
         {
             rectangle.y = 500;
             rectangle.h = 500;
@@ -454,7 +451,7 @@ int main(int argc, char** argv)
 
             if (touche[SDL_SCANCODE_Q])
             {
-                strikeSpeed = 1;
+                strikeSpeed = 1; // correspond a coup lent
             }
             if (touche[SDL_SCANCODE_E])
             {
@@ -486,8 +483,8 @@ int main(int argc, char** argv)
         if ((coup == 1) && (saut == 0))   // coup de poing droit
         {
             rectangleCoup.h = 80;
-            rectangleCoup.x = rectangle.x + rectangle.w;
-            rectangleCoup.y = rectangle.y + 80;
+            rectangleCoup.x = rectangle.x + rectangle.w;// permet de commencer le rectangle coup sur la partie droite du rectangle
+            rectangleCoup.y = rectangle.y + 80; // gerer la position du coup en fonction des ordonnées (inversé en SDL 0 en haut a gauche)
             if (rectangleCoup.w > 220)
             {
                 coup = 2;
@@ -532,8 +529,8 @@ int main(int argc, char** argv)
         if ((coup == 5) && (saut == 0))    // coup de pied bas droit
         {
             rectangleCoup.h = 60;
-            rectangleCoup.x = rectangle.x + rectangle.w;
-            rectangleCoup.y = rectangle.y + 60;
+            rectangleCoup.x = rectangle.x + rectangle.w;// permet de commencer le rectangle coup sur la partie droite du rectangle
+            rectangleCoup.y = rectangle.y + 60;// gerer la position du coup en fonction des ordonnées (inversé en SDL 0 en haut a gauche)
             if (rectangleCoup.w > 180)
             {
                 coup = 6;
@@ -580,8 +577,8 @@ int main(int argc, char** argv)
         if ((coupPied == 1) && (saut == 0))   // coup de pied
         {
             rectangleCoup.h = 130;
-            rectangleCoup.x = rectangle.x + rectangle.w;
-            rectangleCoup.y = rectangle.y + 250;
+            rectangleCoup.x = rectangle.x + rectangle.w; // permet de commencer le rectangle coup sur la partie droite du rectangle
+            rectangleCoup.y = rectangle.y + 250;// gerer la position du coup en fonction des ordonnées (inversé en SDL 0 en haut a gauche)
             if (rectangleCoup.w > 220)
             {
                 coupPied = 2;
@@ -609,8 +606,8 @@ int main(int argc, char** argv)
             avancer = 0;
             compteurAvancer = 0;
         }
-        destRect2.x = rectangle.x;
-        destRect2.y = rectangle.y;
+        destRect2.x = rectangle.x;// permet de mettre le sprite aux coordonnées du rectangle de base car pas forcement même taille entre le rectangle et le sprite
+        destRect2.y = rectangle.y;// permet de mettre le sprite aux coordonnées du rectangle de base car pas forcement même taille entre le rectangle et le sprite
         destRect3.x = rectangle.x;
         destRect3.y = rectangle.y;
         destRect4.x = rectangle.x;
@@ -621,15 +618,15 @@ int main(int argc, char** argv)
         destRectwin3.y = rectangle.y;
 
 
-        hitCheck(&coup, &strikeSpeed, &coupPied, &degat, &rectanglePunchingBall, &rectangleCoup, &barreDeVieDroite);
-        if (barreDeVieDroite.w <= 0) {
-            win(&rectangle, texture, win1, win2, win3, renderer, &destRect2, &destRectwin3, &etape, &compteurWin);
+        hitCheck(&coup, &strikeSpeed, &coupPied, &degat, &rectanglePunchingBall, &rectangleCoup, &barreDeVieDroite);// regarder si toucher ou non
+        if (barreDeVieDroite.w <= 0) { // regarde si a gagner
+            win(&rectangle, texture, win1, win2, win3, renderer, &destRect2, &destRectwin3, &etape, &compteurWin);// affichage si a gagner
         }
         else {
             affichage(texture, textureSprite, textureSpriteDebout2, avancer1, avancer2, avancer3, avancer4, avancer5, accroupis, saut1, saut2, saut3, saut4, saut5, saut6, coupDebout1, coupDebout2,
                 coupDebout3, coupAccroupis1, coupAccroupis2, coupAccroupis3, coupPied1, coupPied2, coupPied3, deboutBot, renderer, &barreDeVie, &barreDeVieDroite, &barreDeVieRed, &barreDeVieRedDroite,
                 &rectangle, &destRect1, &destRect2, &destRect3, &destRect4, &destRect5, &destRectBot1, &rectangleCoup, &snick, &coup, &coupPied, &compteur, &avancer, &compteurAvancer, &compteurSaut, &saut,
-                &rectanglePunchingBall);
+                &rectanglePunchingBall); // affichage si a gagner
         }
 
 
@@ -640,7 +637,7 @@ int main(int argc, char** argv)
             switch (touche2.key.keysym.sym)
             {
             case SDLK_ESCAPE:// Regarde si == touche ESC
-                SDL_DestroyTexture(textureSpriteDebout2);
+                SDL_DestroyTexture(textureSpriteDebout2);// detruit la texture
                 SDL_DestroyTexture(textureSprite);
                 SDL_DestroyTexture(avancer1);
                 SDL_DestroyTexture(avancer2);
@@ -667,7 +664,41 @@ int main(int argc, char** argv)
                 SDL_DestroyTexture(win1);
                 SDL_DestroyTexture(win2);
                 SDL_DestroyTexture(win3);
-                SDL_DestroyTexture(texture);// detruit la texture
+                SDL_DestroyTexture(texture);
+                SDL_DestroyRenderer(renderer);// detruit le rendu
+                SDL_DestroyWindow(pwindow); // Detruit la fenetre
+                jeu = 1;
+                *pjouer = 1; // permet d'arreter le jeu 
+                break;
+            case SDLK_g:// Regarde si == touche g
+                SDL_DestroyTexture(textureSpriteDebout2);// detruit la texture
+                SDL_DestroyTexture(textureSprite);
+                SDL_DestroyTexture(avancer1);
+                SDL_DestroyTexture(avancer2);
+                SDL_DestroyTexture(avancer3);
+                SDL_DestroyTexture(avancer4);
+                SDL_DestroyTexture(avancer5);
+                SDL_DestroyTexture(accroupis);
+                SDL_DestroyTexture(saut1);
+                SDL_DestroyTexture(saut2);
+                SDL_DestroyTexture(saut3);
+                SDL_DestroyTexture(saut4);
+                SDL_DestroyTexture(saut5);
+                SDL_DestroyTexture(saut6);
+                SDL_DestroyTexture(coupDebout1);
+                SDL_DestroyTexture(coupDebout2);
+                SDL_DestroyTexture(coupDebout3);
+                SDL_DestroyTexture(coupAccroupis1);
+                SDL_DestroyTexture(coupAccroupis2);
+                SDL_DestroyTexture(coupAccroupis3);
+                SDL_DestroyTexture(coupPied1);
+                SDL_DestroyTexture(coupPied2);
+                SDL_DestroyTexture(coupPied3);
+                SDL_DestroyTexture(deboutBot);
+                SDL_DestroyTexture(win1);
+                SDL_DestroyTexture(win2);
+                SDL_DestroyTexture(win3);
+                SDL_DestroyTexture(texture);
                 SDL_DestroyRenderer(renderer);// detruit le rendu
                 SDL_DestroyWindow(pwindow); // Detruit la fenetre
                 jeu = 1;
@@ -676,11 +707,22 @@ int main(int argc, char** argv)
             }
             break;
         }
-
     }
 
 
     SDL_Quit();
+    return 0;
+}
+
+
+int main(int argc, char** argv)
+{
+    int jouer = 0;
+    while (jouer == 0) { // permet de pouvoir recommencer le jeu tant que jouer == 0
+        jeu(&jouer);
+    }
+
+
     return 0;
 }
 
