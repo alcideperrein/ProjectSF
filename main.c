@@ -359,7 +359,7 @@ void jeu(int* pjouer) {
 
         touche = SDL_GetKeyboardState(NULL); // récupérer l'état des touches du clavier
 
-        if (touche[SDL_SCANCODE_D] && (coup == 0) && (coupPied == 0) && snick == 0) // aller a gauche
+        if (touche[SDL_SCANCODE_D] && (coup == 0) && (coupPied == 0) && snick == 0 && compteurWin == 0) // aller a gauche
         {
             if (rectangle.x < 1680)
             {
@@ -376,7 +376,7 @@ void jeu(int* pjouer) {
             avancer = 1;
         }
 
-        if (touche[SDL_SCANCODE_A] && (coup == 0) && (coupPied == 0) && snick == 0) // aller a gauche
+        if (touche[SDL_SCANCODE_A] && (coup == 0) && (coupPied == 0) && snick == 0 && compteurWin == 0) // aller a gauche
         {
 
             if (rectangle.x > 20)
