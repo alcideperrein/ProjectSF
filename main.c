@@ -289,9 +289,7 @@ void destructionTexture(SDL_Texture* textureSpriteDebout2, SDL_Texture* textureS
 
 }
 
-void LoadTexture() {
 
-}
 
 void jeu(int* pjouer) {
     SDL_Window* pwindow;
