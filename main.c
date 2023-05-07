@@ -414,7 +414,7 @@ void jeu(int* pjouer) {
         char timer_text[20];
         snprintf(timer_text, sizeof(timer_text), "%02d:%02d", minuteur / 60, minuteur % 60);
 
-        SDL_RenderPresent(renderer);
+        
 
         if (minuteur <= 0) {
             break;
