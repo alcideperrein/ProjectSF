@@ -3,16 +3,31 @@
 #include <SDL_image.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <SDL_ttf.h>
 
-void affichage(SDL_Texture* texture, SDL_Texture* textureSprite, SDL_Texture* textureSpriteDebout2, SDL_Texture* avancer1, SDL_Texture* avancer2, SDL_Texture* avancer3, SDL_Texture* avancer4,
+void affichage(SDL_Texture* textureFond, SDL_Texture* textureSpriteDebout, SDL_Texture* textureSpriteDebout2, SDL_Texture* avancer1, SDL_Texture* avancer2, SDL_Texture* avancer3, SDL_Texture* avancer4,
     SDL_Texture* avancer5, SDL_Texture* accroupis, SDL_Texture* saut1, SDL_Texture* saut2, SDL_Texture* saut3, SDL_Texture* saut4, SDL_Texture* saut5, SDL_Texture* saut6,
     SDL_Texture* coupDebout1, SDL_Texture* coupDebout2, SDL_Texture* coupDebout3, SDL_Texture* coupAccroupis1, SDL_Texture* coupAccroupis2, SDL_Texture* coupAccroupis3, SDL_Texture* coupPied1,
     SDL_Texture* coupPied2, SDL_Texture* coupPied3, SDL_Texture* deboutBot, SDL_Renderer* renderer, SDL_Rect* barreDeVie, SDL_Rect* barreDeVieDroite, SDL_Rect* barreDeVieRed,
-    SDL_Rect* barreDeVieRedDroite, SDL_Rect* rectangle, SDL_Rect* destRect1, SDL_Rect* destRect2, SDL_Rect* destRect3, SDL_Rect* destRect4, SDL_Rect* destRect5, SDL_Rect* destRectBot1,
-    SDL_Rect* rectangleCoup, int* psnick, int* pcoup, int* pcoupPied, int* pcompteur, int* pavancer, int* pcompteurAvancer, int* pcompteursaut, int* psaut, SDL_Rect* rectanglePunchingBall)// est définie pour dessiner les éléments du jeu sur la fenêtre. Elle prend en paramètre la texture à afficher, le renderer, les rectangles de base et de coup, et le coup choisit.
+    SDL_Rect* barreDeVieRedDroite,SDL_Rect* destRect1, SDL_Rect* destRect2, SDL_Rect* destRect3, SDL_Rect* destRect4, SDL_Rect* destRect5, SDL_Rect* destRectBot1,
+    SDL_Rect* rectangleCoup, int* psnick, int* pcoup, int* pcoupPied, int* pcompteur, int* pavancer, int* pcompteurAvancer, int* pcompteursaut, int* psaut, TTF_Font* font,
+    const char* text, int x, int y, SDL_Color* colortimer)// est définie pour dessiner les éléments du jeu sur la fenêtre. Elle prend en paramètre la texture à afficher, le renderer, les rectangles de base et de coup, et le coup choisit.
 {
+
+    SDL_Surface* surface_timer = TTF_RenderText_Solid(font, text, *colortimer);
+    if (!surface_timer) {
+        printf("Erreur de rendu du texte: %s\n", TTF_GetError());
+        return;
+    }
+    SDL_Texture* texture_timer = SDL_CreateTextureFromSurface(renderer, surface_timer);
+
+    if (!textureFond) {
+        printf("Erreur de création de la texture: %s\n", SDL_GetError());
+        SDL_FreeSurface(surface_timer);
+        return;
+    }
     SDL_RenderClear(renderer); // efface le rendu
-    SDL_RenderCopy(renderer, texture, NULL, NULL); // charge la texture sur le rendu
+    SDL_RenderCopy(renderer, textureFond, NULL, NULL); // charge la texture sur le rendu
     SDL_RenderCopy(renderer, deboutBot, NULL, destRectBot1);// charge la texture qui sera mise aux coordonée de destRectBot1
     if (*psaut == 1 || *psaut == 2)
     {
@@ -142,7 +157,7 @@ void affichage(SDL_Texture* texture, SDL_Texture* textureSprite, SDL_Texture* te
     {
         if (*pcompteur < 80)
         {
-            SDL_RenderCopy(renderer, textureSprite, NULL, destRect2);
+            SDL_RenderCopy(renderer, textureSpriteDebout, NULL, destRect2);
             *pcompteur += 1;
         }
         else
@@ -155,20 +170,19 @@ void affichage(SDL_Texture* texture, SDL_Texture* textureSprite, SDL_Texture* te
             }
         }
     }
-
-    SDL_SetRenderDrawColor(renderer, 0, 255, 0, SDL_ALPHA_OPAQUE);// choisit la couleur
-    SDL_RenderDrawRect(renderer, rectangle);// dessine le rectangle pour la couleur choisit (SDL_RenderDrawRect rectangle vide,SDL_RenderFillRect rectangle plein)
-    SDL_RenderDrawRect(renderer, rectanglePunchingBall);
-    if ((*pcoup != 0) || (*pcoupPied != 0))
-    {
-        SDL_RenderDrawRect(renderer, rectangleCoup);
-    }
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, SDL_ALPHA_OPAQUE);// choisit la couleur
     SDL_RenderFillRect(renderer, barreDeVieRed);// dessine le rectangle en plein pour la couleur choisit ( SDL_RenderDrawRect rectangle vide,SDL_RenderFillRect rectangle plein)
     SDL_RenderFillRect(renderer, barreDeVieRedDroite);
     SDL_SetRenderDrawColor(renderer, 255, 255, 0, SDL_ALPHA_OPAQUE);
     SDL_RenderFillRect(renderer, barreDeVie);
     SDL_RenderFillRect(renderer, barreDeVieDroite);
+
+
+
+    SDL_Rect rect = { x, y, surface_timer->w, surface_timer->h };
+    SDL_RenderCopy(renderer, texture_timer, NULL, &rect);
+
+    SDL_DestroyTexture(texture_timer);
     SDL_RenderPresent(renderer);// affiche le rendu
 }
 
@@ -222,11 +236,58 @@ void win(SDL_Rect* rectangle, SDL_Texture* texture, SDL_Texture* win1, SDL_Textu
     SDL_RenderPresent(renderer);// affiche le rendu
 }
 
+Uint32 timer_callback(Uint32 interval, void* param) {
+    int* minuteur = (int*)param;
+    (*minuteur)--;
+    return (0 < *minuteur) ? interval : 0;
+}
+
+void destructionTexture(SDL_Texture* textureSpriteDebout2, SDL_Texture* textureSpriteDebout, SDL_Texture* avancer1, SDL_Texture* avancer2, SDL_Texture* avancer3, SDL_Texture* avancer4, SDL_Texture* avancer5,
+    SDL_Texture* accroupis, SDL_Texture* saut1, SDL_Texture* saut2, SDL_Texture* saut3, SDL_Texture* saut4, SDL_Texture* saut5, SDL_Texture* saut6, SDL_Texture* coupDebout1, SDL_Texture* coupDebout2,
+    SDL_Texture* coupDebout3, SDL_Texture* coupAccroupis1, SDL_Texture* coupAccroupis2, SDL_Texture* coupAccroupis3, SDL_Texture* coupPied1, SDL_Texture* coupPied2, SDL_Texture* coupPied3, SDL_Texture* deboutBot,
+    SDL_Texture* win1, SDL_Texture* win2, SDL_Texture* win3, SDL_Texture* textureFond, SDL_Renderer* renderer, SDL_Window* pwindow) {
+
+
+    SDL_DestroyTexture(textureSpriteDebout2);// detruit la texture
+    SDL_DestroyTexture(textureSpriteDebout);
+    SDL_DestroyTexture(avancer1);
+    SDL_DestroyTexture(avancer2);
+    SDL_DestroyTexture(avancer3);
+    SDL_DestroyTexture(avancer4);
+    SDL_DestroyTexture(avancer5);
+    SDL_DestroyTexture(accroupis);
+    SDL_DestroyTexture(saut1);
+    SDL_DestroyTexture(saut2);
+    SDL_DestroyTexture(saut3);
+    SDL_DestroyTexture(saut4);
+    SDL_DestroyTexture(saut5);
+    SDL_DestroyTexture(saut6);
+    SDL_DestroyTexture(coupDebout1);
+    SDL_DestroyTexture(coupDebout2);
+    SDL_DestroyTexture(coupDebout3);
+    SDL_DestroyTexture(coupAccroupis1);
+    SDL_DestroyTexture(coupAccroupis2);
+    SDL_DestroyTexture(coupAccroupis3);
+    SDL_DestroyTexture(coupPied1);
+    SDL_DestroyTexture(coupPied2);
+    SDL_DestroyTexture(coupPied3);
+    SDL_DestroyTexture(deboutBot);
+    SDL_DestroyTexture(win1);
+    SDL_DestroyTexture(win2);
+    SDL_DestroyTexture(win3);
+    SDL_DestroyTexture(textureFond);
+    SDL_DestroyRenderer(renderer);// detruit le rendu
+    SDL_DestroyWindow(pwindow); // Detruit la fenetre
+
+}
+
+
+
 void jeu(int* pjouer) {
     SDL_Window* pwindow;
     SDL_Renderer* renderer;
-    Uint8 const* touche;
-    SDL_Event touche2;
+    Uint8 const* toucheScancode;
+    SDL_Event touche;
     SDL_Rect rectangle = { 20, 500, 220, 500 };// {x,y,w,h}
     SDL_Rect rectangleCoup = { 0, 0, 0, 100 };
     SDL_Rect rectanglePunchingBall = { 1600, 500, 220, 500 };
@@ -241,8 +302,8 @@ void jeu(int* pjouer) {
     SDL_Rect destRect5;
     SDL_Rect destRectBot1;
     SDL_Rect destRectwin3;
-    SDL_Texture* texture;
-    SDL_Texture* textureSprite;
+    SDL_Texture* textureFond;
+    SDL_Texture* textureSpriteDebout;
     SDL_Texture* textureSpriteDebout2;
     SDL_Texture* avancer1;
     SDL_Texture* avancer2;
@@ -269,7 +330,10 @@ void jeu(int* pjouer) {
     SDL_Texture* win1;
     SDL_Texture* win2;
     SDL_Texture* win3;
+    SDL_Event evenement;
+    SDL_Color color_timer = { 0, 0, 0 };
 
+    int minuteur = 180; // 3 minutes en secondes
     int jeu = 0;
     int saut = 0;
     int snick = 0;
@@ -284,6 +348,7 @@ void jeu(int* pjouer) {
     int degat = 0;
     int etape = 0;
     int compteurWin = 0;
+    char timer_text[20];
 
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER);
     SDL_version nb;
@@ -295,8 +360,8 @@ void jeu(int* pjouer) {
         SDL_WINDOW_FULLSCREEN);// Cree la fenêtre de dimension 1920px par 1080px en fullscreen
 
     renderer = SDL_CreateRenderer(pwindow, -1, SDL_RENDERER_SOFTWARE); // creer un rendu
-    texture = IMG_LoadTexture(renderer, "C:/Users/Public/SFBackground.bmp"); // telecharger la texture (IMG_LoadTexture besoin de SLD_Image)
-    textureSprite = IMG_LoadTexture(renderer, "C:/Users/Public/Debout.png");
+    textureFond = IMG_LoadTexture(renderer, "C:/Users/Public/SFBackground.bmp"); // telecharger la texture (IMG_LoadTexture besoin de SLD_Image)
+    textureSpriteDebout = IMG_LoadTexture(renderer, "C:/Users/Public/Debout.png");
     textureSpriteDebout2 = IMG_LoadTexture(renderer, "C:/Users/Public/Debout2.png");
     avancer1 = IMG_LoadTexture(renderer, "C:/Users/Public/avancer1.png");
     avancer2 = IMG_LoadTexture(renderer, "C:/Users/Public/avancer2.png");
@@ -338,7 +403,7 @@ void jeu(int* pjouer) {
     destRectBot1.x = rectanglePunchingBall.x;// le rectangle ou on va afficher le sprite prend la valeur du rectangle de la hitbox punchingball
     destRectBot1.y = rectanglePunchingBall.y;
 
-    SDL_QueryTexture(textureSprite, NULL, NULL, &destRect2.w, &destRect2.h);// permet que la hauteur et la largeur du rectangle correspondent a celle du sprite
+    SDL_QueryTexture(textureSpriteDebout, NULL, NULL, &destRect2.w, &destRect2.h);// permet que la hauteur et la largeur du rectangle correspondent a celle du sprite
     SDL_QueryTexture(accroupis, NULL, NULL, &destRect3.w, &destRect3.h);
     SDL_QueryTexture(coupDebout3, NULL, NULL, &destRect4.w, &destRect4.h);
     SDL_QueryTexture(coupAccroupis3, NULL, NULL, &destRect5.w, &destRect5.h);
@@ -347,19 +412,48 @@ void jeu(int* pjouer) {
 
     SDL_RenderClear(renderer); // efface le rendu 
 
-    SDL_RenderCopy(renderer, texture, NULL, &destRect1);// charge la texture sur le rendu
+    SDL_RenderCopy(renderer, textureFond, NULL, &destRect1);// charge la texture sur le rendu
 
 
     SDL_RenderPresent(renderer);//affiche un rendu 
+
+
+    if (TTF_Init() < 0) {
+        printf("Erreur d'initialisation de SDL_ttf: %s\n", TTF_GetError());
+        SDL_Quit();
+    }
+    TTF_Font* font = TTF_OpenFont("C:/Users/Public/Font.ttf", 50);
+    SDL_TimerID timer_id = SDL_AddTimer(1000, timer_callback, &minuteur);
+
+
+
+
 
 
 
     while (jeu == 0)
     {
 
-        touche = SDL_GetKeyboardState(NULL); // récupérer l'état des touches du clavier
+        while (SDL_PollEvent(&evenement)) {
+            switch (evenement.type) {
+            case SDL_QUIT:
+                jeu = 1;
+                break;
+            default:
+                break;
+            }
+        }
+        // Afficher le minuteur ici, en utilisant SDL_ttf
 
-        if (touche[SDL_SCANCODE_D] && (coup == 0) && (coupPied == 0) && snick == 0 && compteurWin == 0) // aller a gauche
+        snprintf(timer_text, sizeof(timer_text), "%02d:%02d", minuteur / 60, minuteur % 60);
+
+
+
+
+
+        toucheScancode = SDL_GetKeyboardState(NULL); // récupérer l'état des touches du clavier
+
+        if (toucheScancode[SDL_SCANCODE_D] && (coup == 0) && (coupPied == 0) && snick == 0 && compteurWin == 0) // aller a gauche
         {
             if (rectangle.x < 1680)
             {
@@ -376,7 +470,7 @@ void jeu(int* pjouer) {
             avancer = 1;
         }
 
-        if (touche[SDL_SCANCODE_A] && (coup == 0) && (coupPied == 0) && snick == 0 && compteurWin == 0) // aller a gauche
+        if (toucheScancode[SDL_SCANCODE_A] && (coup == 0) && (coupPied == 0) && snick == 0 && compteurWin == 0) // aller a gauche
         {
 
             if (rectangle.x > 20)
@@ -394,13 +488,13 @@ void jeu(int* pjouer) {
 
         }
 
-        if ((touche[SDL_SCANCODE_S]) && (saut == 0) && (coup == 0) && (coupPied == 0)) // quand on appui sur la touche pour se baisser
+        if ((toucheScancode[SDL_SCANCODE_S]) && (saut == 0) && (coup == 0) && (coupPied == 0)) // quand on appui sur la touche pour se baisser
         {
             rectangle.y = 700;
             rectangle.h = 300;
             snick = 1;
         }
-        if ((touche[SDL_SCANCODE_W]) && (saut == 0) && (snick == 0) && (coup == 0) && (coupPied == 0))// quand on appui sur la touche pour sauter
+        if ((toucheScancode[SDL_SCANCODE_W]) && (saut == 0) && (snick == 0) && (coup == 0) && (coupPied == 0))// quand on appui sur la touche pour sauter
         {
             if (rectangle.y > 130)
             {
@@ -436,7 +530,7 @@ void jeu(int* pjouer) {
         }
 
 
-        if ((touche[SDL_SCANCODE_S] == 0) && (snick == 1) && (saut == 0) && (coup == 0)) // quand on lache la touche pour se relever
+        if ((toucheScancode[SDL_SCANCODE_S] == 0) && (snick == 1) && (saut == 0) && (coup == 0)) // quand on lache la touche pour se relever
         {
             rectangle.y = 500;
             rectangle.h = 500;
@@ -446,18 +540,18 @@ void jeu(int* pjouer) {
         }
 
 
-        if (((touche[SDL_SCANCODE_C]) || (touche[SDL_SCANCODE_Q]) || (touche[SDL_SCANCODE_E]) || ((touche[SDL_SCANCODE_R] && snick == 0))) && (saut == 0))
+        if (((toucheScancode[SDL_SCANCODE_C]) || (toucheScancode[SDL_SCANCODE_Q]) || (toucheScancode[SDL_SCANCODE_E]) || ((toucheScancode[SDL_SCANCODE_R] && snick == 0))) && (saut == 0))
         {
 
-            if (touche[SDL_SCANCODE_Q])
+            if (toucheScancode[SDL_SCANCODE_Q])
             {
                 strikeSpeed = 1; // correspond a coup lent
             }
-            if (touche[SDL_SCANCODE_E])
+            if (toucheScancode[SDL_SCANCODE_E])
             {
                 strikeSpeed = 2; // correspond a coup moyen
             }
-            if ((touche[SDL_SCANCODE_R]) && (side == 1) && (snick == 0))
+            if ((toucheScancode[SDL_SCANCODE_R]) && (side == 1) && (snick == 0))
             {
                 coupPied = 1; // correspond a coup pied
                 side = 3;
@@ -601,7 +695,7 @@ void jeu(int* pjouer) {
 
 
 
-        if ((touche[SDL_SCANCODE_D] == 0 && touche[SDL_SCANCODE_A] == 0 && saut == 0 && snick == 0) || (touche[SDL_SCANCODE_D] && touche[SDL_SCANCODE_A] && saut == 0 && snick == 0))
+        if ((toucheScancode[SDL_SCANCODE_D] == 0 && toucheScancode[SDL_SCANCODE_A] == 0 && saut == 0 && snick == 0) || (toucheScancode[SDL_SCANCODE_D] && toucheScancode[SDL_SCANCODE_A] && saut == 0 && snick == 0))
         {
             avancer = 0;
             compteurAvancer = 0;
@@ -619,88 +713,33 @@ void jeu(int* pjouer) {
 
 
         hitCheck(&coup, &strikeSpeed, &coupPied, &degat, &rectanglePunchingBall, &rectangleCoup, &barreDeVieDroite);// regarder si toucher ou non
-        if (barreDeVieDroite.w <= 0) { // regarde si a gagner
-            win(&rectangle, texture, win1, win2, win3, renderer, &destRect2, &destRectwin3, &etape, &compteurWin);// affichage si a gagner
+        if (barreDeVieDroite.w <= 0 || minuteur <= 0) { // regarde si a gagner
+            win(&rectangle, textureFond, win1, win2, win3, renderer, &destRect2, &destRectwin3, &etape, &compteurWin);// affichage si a gagner
         }
         else {
-            affichage(texture, textureSprite, textureSpriteDebout2, avancer1, avancer2, avancer3, avancer4, avancer5, accroupis, saut1, saut2, saut3, saut4, saut5, saut6, coupDebout1, coupDebout2,
-                coupDebout3, coupAccroupis1, coupAccroupis2, coupAccroupis3, coupPied1, coupPied2, coupPied3, deboutBot, renderer, &barreDeVie, &barreDeVieDroite, &barreDeVieRed, &barreDeVieRedDroite,
-                &rectangle, &destRect1, &destRect2, &destRect3, &destRect4, &destRect5, &destRectBot1, &rectangleCoup, &snick, &coup, &coupPied, &compteur, &avancer, &compteurAvancer, &compteurSaut, &saut,
-                &rectanglePunchingBall); // affichage si a gagner
+            affichage(textureFond, textureSpriteDebout, textureSpriteDebout2, avancer1, avancer2, avancer3, avancer4, avancer5, accroupis, saut1, saut2, saut3, saut4, saut5, saut6, coupDebout1, coupDebout2,
+                coupDebout3, coupAccroupis1, coupAccroupis2, coupAccroupis3, coupPied1, coupPied2, coupPied3, deboutBot, renderer, &barreDeVie, &barreDeVieDroite, &barreDeVieRed, &barreDeVieRedDroite
+                , &destRect1, &destRect2, &destRect3, &destRect4, &destRect5, &destRectBot1, &rectangleCoup, &snick, &coup, &coupPied, &compteur, &avancer, &compteurAvancer, &compteurSaut, &saut
+                , font, timer_text, 900, 70, &color_timer); // affichage si a gagner
         }
 
 
-        SDL_PollEvent(&touche2);// Récupération des actions de l'utilisateur
-        switch (touche2.type)
+        SDL_PollEvent(&touche);// Récupération des actions de l'utilisateur
+        switch (touche.type)
         {
         case SDL_KEYUP:
-            switch (touche2.key.keysym.sym)
+            switch (touche.key.keysym.sym)
             {
             case SDLK_ESCAPE:// Regarde si == touche ESC
-                SDL_DestroyTexture(textureSpriteDebout2);// detruit la texture
-                SDL_DestroyTexture(textureSprite);
-                SDL_DestroyTexture(avancer1);
-                SDL_DestroyTexture(avancer2);
-                SDL_DestroyTexture(avancer3);
-                SDL_DestroyTexture(avancer4);
-                SDL_DestroyTexture(avancer5);
-                SDL_DestroyTexture(accroupis);
-                SDL_DestroyTexture(saut1);
-                SDL_DestroyTexture(saut2);
-                SDL_DestroyTexture(saut3);
-                SDL_DestroyTexture(saut4);
-                SDL_DestroyTexture(saut5);
-                SDL_DestroyTexture(saut6);
-                SDL_DestroyTexture(coupDebout1);
-                SDL_DestroyTexture(coupDebout2);
-                SDL_DestroyTexture(coupDebout3);
-                SDL_DestroyTexture(coupAccroupis1);
-                SDL_DestroyTexture(coupAccroupis2);
-                SDL_DestroyTexture(coupAccroupis3);
-                SDL_DestroyTexture(coupPied1);
-                SDL_DestroyTexture(coupPied2);
-                SDL_DestroyTexture(coupPied3);
-                SDL_DestroyTexture(deboutBot);
-                SDL_DestroyTexture(win1);
-                SDL_DestroyTexture(win2);
-                SDL_DestroyTexture(win3);
-                SDL_DestroyTexture(texture);
-                SDL_DestroyRenderer(renderer);// detruit le rendu
-                SDL_DestroyWindow(pwindow); // Detruit la fenetre
+                destructionTexture(textureSpriteDebout2, textureSpriteDebout, avancer1, avancer2, avancer3, avancer4, avancer5, accroupis, saut1, saut2, saut3, saut4, saut5, saut6, coupDebout1, coupDebout2, coupDebout3,
+                    coupAccroupis1, coupAccroupis2, coupAccroupis3, coupPied1, coupPied2, coupPied3, deboutBot, win1, win2, win3, textureFond, renderer, pwindow);
                 jeu = 1;
                 *pjouer = 1; // permet d'arreter le jeu 
                 break;
             case SDLK_g:// Regarde si == touche g
-                SDL_DestroyTexture(textureSpriteDebout2);// detruit la texture
-                SDL_DestroyTexture(textureSprite);
-                SDL_DestroyTexture(avancer1);
-                SDL_DestroyTexture(avancer2);
-                SDL_DestroyTexture(avancer3);
-                SDL_DestroyTexture(avancer4);
-                SDL_DestroyTexture(avancer5);
-                SDL_DestroyTexture(accroupis);
-                SDL_DestroyTexture(saut1);
-                SDL_DestroyTexture(saut2);
-                SDL_DestroyTexture(saut3);
-                SDL_DestroyTexture(saut4);
-                SDL_DestroyTexture(saut5);
-                SDL_DestroyTexture(saut6);
-                SDL_DestroyTexture(coupDebout1);
-                SDL_DestroyTexture(coupDebout2);
-                SDL_DestroyTexture(coupDebout3);
-                SDL_DestroyTexture(coupAccroupis1);
-                SDL_DestroyTexture(coupAccroupis2);
-                SDL_DestroyTexture(coupAccroupis3);
-                SDL_DestroyTexture(coupPied1);
-                SDL_DestroyTexture(coupPied2);
-                SDL_DestroyTexture(coupPied3);
-                SDL_DestroyTexture(deboutBot);
-                SDL_DestroyTexture(win1);
-                SDL_DestroyTexture(win2);
-                SDL_DestroyTexture(win3);
-                SDL_DestroyTexture(texture);
-                SDL_DestroyRenderer(renderer);// detruit le rendu
-                SDL_DestroyWindow(pwindow); // Detruit la fenetre
+                destructionTexture(textureSpriteDebout2, textureSpriteDebout, avancer1, avancer2, avancer3, avancer4, avancer5, accroupis, saut1, saut2, saut3, saut4, saut5, saut6, coupDebout1, coupDebout2, coupDebout3,
+                    coupAccroupis1, coupAccroupis2, coupAccroupis3, coupPied1, coupPied2, coupPied3, deboutBot, win1, win2, win3, textureFond, renderer, pwindow);
+
                 jeu = 1;
                 break;
 
@@ -711,7 +750,6 @@ void jeu(int* pjouer) {
 
 
     SDL_Quit();
-    return 0;
 }
 
 
