@@ -3,13 +3,14 @@
 #include <SDL_image.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <SDL_ttf.h>
 
 void affichage(SDL_Texture* texture, SDL_Texture* textureSprite, SDL_Texture* textureSpriteDebout2, SDL_Texture* avancer1, SDL_Texture* avancer2, SDL_Texture* avancer3, SDL_Texture* avancer4,
     SDL_Texture* avancer5, SDL_Texture* accroupis, SDL_Texture* saut1, SDL_Texture* saut2, SDL_Texture* saut3, SDL_Texture* saut4, SDL_Texture* saut5, SDL_Texture* saut6,
     SDL_Texture* coupDebout1, SDL_Texture* coupDebout2, SDL_Texture* coupDebout3, SDL_Texture* coupAccroupis1, SDL_Texture* coupAccroupis2, SDL_Texture* coupAccroupis3, SDL_Texture* coupPied1,
     SDL_Texture* coupPied2, SDL_Texture* coupPied3, SDL_Texture* deboutBot, SDL_Renderer* renderer, SDL_Rect* barreDeVie, SDL_Rect* barreDeVieDroite, SDL_Rect* barreDeVieRed,
     SDL_Rect* barreDeVieRedDroite, SDL_Rect* rectangle, SDL_Rect* destRect1, SDL_Rect* destRect2, SDL_Rect* destRect3, SDL_Rect* destRect4, SDL_Rect* destRect5, SDL_Rect* destRectBot1,
-    SDL_Rect* rectangleCoup, int* psnick, int* pcoup, int* pcoupPied, int* pcompteur, int* pavancer, int* pcompteurAvancer, int* pcompteursaut, int* psaut, SDL_Rect* rectanglePunchingBall)// est définie pour dessiner les éléments du jeu sur la fenêtre. Elle prend en paramètre la texture à afficher, le renderer, les rectangles de base et de coup, et le coup choisit.
+    SDL_Rect* rectangleCoup, int* psnick, int* pcoup, int* pcoupPied, int* pcompteur, int* pavancer, int* pcompteurAvancer, int* pcompteursaut, int* psaut, SDL_Rect* rectanglePunchingBall, TTF_Font* font, const char* text, int x, int y)// est définie pour dessiner les éléments du jeu sur la fenêtre. Elle prend en paramètre la texture à afficher, le renderer, les rectangles de base et de coup, et le coup choisit.
 {
     SDL_RenderClear(renderer); // efface le rendu
     SDL_RenderCopy(renderer, texture, NULL, NULL); // charge la texture sur le rendu
@@ -169,6 +170,24 @@ void affichage(SDL_Texture* texture, SDL_Texture* textureSprite, SDL_Texture* te
     SDL_SetRenderDrawColor(renderer, 255, 255, 0, SDL_ALPHA_OPAQUE);
     SDL_RenderFillRect(renderer, barreDeVie);
     SDL_RenderFillRect(renderer, barreDeVieDroite);
+    SDL_Color color_timer = { 0, 0, 0 };
+    SDL_Surface* surface_timer = TTF_RenderText_Solid(font, text, color_timer);
+    if (!surface_timer) {
+        printf("Erreur de rendu du texte: %s\n", TTF_GetError());
+        return;
+    }
+
+    SDL_Texture* texture_timer = SDL_CreateTextureFromSurface(renderer, surface_timer);
+    if (!texture) {
+        printf("Erreur de création de la texture: %s\n", SDL_GetError());
+        SDL_FreeSurface(surface_timer);
+        return;
+    }
+
+    SDL_Rect rect = { x, y, surface_timer->w, surface_timer->h };
+    SDL_RenderCopy(renderer, texture_timer, NULL, &rect);
+
+    SDL_DestroyTexture(texture_timer);
     SDL_RenderPresent(renderer);// affiche le rendu
 }
 
@@ -221,6 +240,13 @@ void win(SDL_Rect* rectangle, SDL_Texture* texture, SDL_Texture* win1, SDL_Textu
     }
     SDL_RenderPresent(renderer);// affiche le rendu
 }
+
+Uint32 timer_callback(Uint32 interval, void* param) {
+    int* minuteur = (int*)param;
+    (*minuteur)--;
+    return (0 < *minuteur) ? interval : 0;
+}
+
 
 void jeu(int* pjouer) {
     SDL_Window* pwindow;
@@ -352,10 +378,47 @@ void jeu(int* pjouer) {
 
     SDL_RenderPresent(renderer);//affiche un rendu 
 
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0) {
+        printf("Erreur d'initialisation de SDL: %s\n", SDL_GetError());
+        return 1;
+    }
+    if (TTF_Init() < 0) {
+        printf("Erreur d'initialisation de SDL_ttf: %s\n", TTF_GetError());
+        SDL_Quit();
+        return 1;
+    }
+    TTF_Font* font = TTF_OpenFont("C:/Users/Public/Font.ttf", 50);
+
+
+    int minuteur = 180; // 3 minutes en secondes
+    SDL_TimerID timer_id = SDL_AddTimer(1000, timer_callback, &minuteur);
+
+
+    SDL_Event event;
+
 
 
     while (jeu == 0)
     {
+        SDL_Event evenement;
+        while (SDL_PollEvent(&evenement)) {
+            switch (evenement.type) {
+            case SDL_QUIT:
+                jeu = 1;
+                break;
+            default:
+                break;
+            }
+        }
+        // Afficher le minuteur ici, en utilisant SDL_ttf
+        char timer_text[20];
+        snprintf(timer_text, sizeof(timer_text), "%02d:%02d", minuteur / 60, minuteur % 60);
+
+        SDL_RenderPresent(renderer);
+
+        if (minuteur <= 0) {
+            break;
+        }
 
         touche = SDL_GetKeyboardState(NULL); // récupérer l'état des touches du clavier
 
@@ -626,7 +689,7 @@ void jeu(int* pjouer) {
             affichage(texture, textureSprite, textureSpriteDebout2, avancer1, avancer2, avancer3, avancer4, avancer5, accroupis, saut1, saut2, saut3, saut4, saut5, saut6, coupDebout1, coupDebout2,
                 coupDebout3, coupAccroupis1, coupAccroupis2, coupAccroupis3, coupPied1, coupPied2, coupPied3, deboutBot, renderer, &barreDeVie, &barreDeVieDroite, &barreDeVieRed, &barreDeVieRedDroite,
                 &rectangle, &destRect1, &destRect2, &destRect3, &destRect4, &destRect5, &destRectBot1, &rectangleCoup, &snick, &coup, &coupPied, &compteur, &avancer, &compteurAvancer, &compteurSaut, &saut,
-                &rectanglePunchingBall); // affichage si a gagner
+                &rectanglePunchingBall, font, timer_text, 900, 70); // affichage si a gagner
         }
 
 
