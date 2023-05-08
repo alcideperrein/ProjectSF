@@ -9,7 +9,7 @@ void affichage(SDL_Texture* textureFond, SDL_Texture* textureSpriteDebout, SDL_T
     SDL_Texture* avancer5, SDL_Texture* accroupis, SDL_Texture* saut1, SDL_Texture* saut2, SDL_Texture* saut3, SDL_Texture* saut4, SDL_Texture* saut5, SDL_Texture* saut6,
     SDL_Texture* coupDebout1, SDL_Texture* coupDebout2, SDL_Texture* coupDebout3, SDL_Texture* coupAccroupis1, SDL_Texture* coupAccroupis2, SDL_Texture* coupAccroupis3, SDL_Texture* coupPied1,
     SDL_Texture* coupPied2, SDL_Texture* coupPied3, SDL_Texture* deboutBot, SDL_Renderer* renderer, SDL_Rect* barreDeVie, SDL_Rect* barreDeVieDroite, SDL_Rect* barreDeVieRed,
-    SDL_Rect* barreDeVieRedDroite, SDL_Rect* destRectDebout, SDL_Rect* destRectAccroupis, SDL_Rect* destRect4, SDL_Rect* destRect5, SDL_Rect* destRectBot1,
+    SDL_Rect* barreDeVieRedDroite, SDL_Rect* destRectDebout, SDL_Rect* destRectAccroupis, SDL_Rect* destRectCoupDebout, SDL_Rect* destRectCoupAccroupris, SDL_Rect* destRectBot1,
     SDL_Rect* rectangleCoup, int* psnick, int* pcoup, int* pcoupPied, int* pcompteur, int* pavancer, int* pcompteurAvancer, int* pcompteursaut, int* psaut, TTF_Font* font,
     const char* text, int x, int y, SDL_Color* colortimer)// est définie pour dessiner les éléments du jeu sur la fenêtre. Elle prend en paramètre la texture à afficher, le renderer, les rectangles de base et de coup, et le coup choisit.
 {
@@ -77,7 +77,7 @@ void affichage(SDL_Texture* textureFond, SDL_Texture* textureSpriteDebout, SDL_T
         }
         else if (rectangleCoup->w > 160)
         {
-            SDL_RenderCopy(renderer, coupDebout3, NULL, destRect4);
+            SDL_RenderCopy(renderer, coupDebout3, NULL, destRectCoupDebout);
         }
         else if (rectangleCoup->w > 30)
         {
@@ -93,7 +93,7 @@ void affichage(SDL_Texture* textureFond, SDL_Texture* textureSpriteDebout, SDL_T
         }
         else if (rectangleCoup->w > 160)
         {
-            SDL_RenderCopy(renderer, coupPied3, NULL, destRect4);
+            SDL_RenderCopy(renderer, coupPied3, NULL, destRectCoupDebout);
         }
         else if (rectangleCoup->w > 30)
         {
@@ -109,7 +109,7 @@ void affichage(SDL_Texture* textureFond, SDL_Texture* textureSpriteDebout, SDL_T
         }
         else if (rectangleCoup->w > 140)
         {
-            SDL_RenderCopy(renderer, coupAccroupis3, NULL, destRect5);
+            SDL_RenderCopy(renderer, coupAccroupis3, NULL, destRectCoupAccroupris);
         }
         else if (rectangleCoup->w > 30)
         {
@@ -298,8 +298,8 @@ void jeu(int* pjouer) {
   
     SDL_Rect destRectDebout;
     SDL_Rect destRectAccroupis;
-    SDL_Rect destRect4;
-    SDL_Rect destRect5;
+    SDL_Rect destRectCoupDebout;
+    SDL_Rect destRectCoupAccroupris;
     SDL_Rect destRectBot1;
     SDL_Rect destRectwin3;
     SDL_Texture* textureFond;
@@ -396,8 +396,8 @@ void jeu(int* pjouer) {
 
     SDL_QueryTexture(textureSpriteDebout, NULL, NULL, &destRectDebout.w, &destRectDebout.h);// permet que la hauteur et la largeur du rectangle correspondent a celle du sprite
     SDL_QueryTexture(accroupis, NULL, NULL, &destRectAccroupis.w, &destRectAccroupis.h);
-    SDL_QueryTexture(coupDebout3, NULL, NULL, &destRect4.w, &destRect4.h);
-    SDL_QueryTexture(coupAccroupis3, NULL, NULL, &destRect5.w, &destRect5.h);
+    SDL_QueryTexture(coupDebout3, NULL, NULL, &destRectCoupDebout.w, &destRectCoupDebout.h);
+    SDL_QueryTexture(coupAccroupis3, NULL, NULL, &destRectCoupAccroupris.w, &destRectCoupAccroupris.h);
     SDL_QueryTexture(deboutBot, NULL, NULL, &destRectBot1.w, &destRectBot1.h);
     SDL_QueryTexture(win3, NULL, NULL, &destRectwin3.w, &destRectwin3.h);
 
@@ -695,10 +695,10 @@ void jeu(int* pjouer) {
         destRectDebout.y = rectanglePerso1.y;// permet de mettre le sprite aux coordonnées du rectangle de base car pas forcement même taille entre le rectangle et le sprite
         destRectAccroupis.x = rectanglePerso1.x;
         destRectAccroupis.y = rectanglePerso1.y;
-        destRect4.x = rectanglePerso1.x;
-        destRect4.y = rectanglePerso1.y;
-        destRect5.x = rectanglePerso1.x;
-        destRect5.y = rectanglePerso1.y;
+        destRectCoupDebout.x = rectanglePerso1.x;
+        destRectCoupDebout.y = rectanglePerso1.y;
+        destRectCoupAccroupris.x = rectanglePerso1.x;
+        destRectCoupAccroupris.y = rectanglePerso1.y;
         destRectwin3.x = rectanglePerso1.x;
         destRectwin3.y = rectanglePerso1.y;
 
@@ -710,7 +710,7 @@ void jeu(int* pjouer) {
         else {
             affichage(textureFond, textureSpriteDebout, textureSpriteDebout2, avancer1, avancer2, avancer3, avancer4, avancer5, accroupis, saut1, saut2, saut3, saut4, saut5, saut6, coupDebout1, coupDebout2,
                 coupDebout3, coupAccroupis1, coupAccroupis2, coupAccroupis3, coupPied1, coupPied2, coupPied3, deboutBot, renderer, &barreDeVie, &barreDeVieDroite, &barreDeVieRed, &barreDeVieRedDroite
-                , &destRectDebout, &destRectAccroupis, &destRect4, &destRect5, &destRectBot1, &rectangleCoup, &snick, &coup, &coupPied, &compteur, &avancer, &compteurAvancer, &compteurSaut, &saut
+                , &destRectDebout, &destRectAccroupis, &destRectCoupDebout, &destRectCoupAccroupris, &destRectBot1, &rectangleCoup, &snick, &coup, &coupPied, &compteur, &avancer, &compteurAvancer, &compteurSaut, &saut
                 , font, timer_text, 900, 70, &color_timer); // affichage si a gagner
         }
 
