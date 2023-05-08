@@ -1,4 +1,4 @@
-#include "structure.h"
+
 #include <SDL.h>
 #include <SDL_image.h>
 #include <stdio.h>
@@ -440,20 +440,10 @@ void jeu(int* pjouer)
     while (jeu == 0)
     {
 
-        while (SDL_PollEvent(&evenement))
-        {
-            switch (evenement.type)
-            {
-            case SDL_QUIT:
-                jeu = 1;
-                break;
-            default:
-                break;
-            }
-        }
         // Afficher le minuteur ici, en utilisant SDL_ttf
 
-        snprintf(timer_text, sizeof(timer_text), "%02d:%02d", minuteur / 60, minuteur % 60);
+        snprintf(timer_text, sizeof(timer_text), "%02d:%02d", minuteur / 60, minuteur % 60);/*snprint sert formater une chaine de caractere, 
+        "%02d:%02d" signifie que la forme du timer doit etre retourne sous un entier de minimum 2 caractere en remplissant les espacs vides avec des 0*/ 
 
 
 
@@ -518,7 +508,7 @@ void jeu(int* pjouer)
 
         if (saut == 1)
         {
-            if (rectanglePerso1.y < 130)
+            if (rectanglePerso1.y < 130)// permet qu'une fois qu'il est a cette hauteur le perso redescende
             {
                 saut = 2;
             }
@@ -582,7 +572,7 @@ void jeu(int* pjouer)
 
 
 
-        if ((coup == 1) && (saut == 0))   // coup de poing droit
+        if ((coup == 1) && (saut == 0))   // coup de poing haut
         {
             rectangleCoup.h = 80;
             rectangleCoup.x = rectanglePerso1.x + rectanglePerso1.w;// permet de commencer le rectangle coup sur la partie droite du rectangle
@@ -605,7 +595,7 @@ void jeu(int* pjouer)
             }
 
         }
-        if ((coup == 2) && (saut == 0))   // retour coup de point gauche
+        if ((coup == 2) && (saut == 0))   // retour coup de point haut
         {
             if (strikeSpeed == 1)
             {
@@ -628,7 +618,7 @@ void jeu(int* pjouer)
             }
         }
 
-        if ((coup == 5) && (saut == 0))    // coup de pied bas droit
+        if ((coup == 5) && (saut == 0))    // coup de point bas 
         {
             rectangleCoup.h = 60;
             rectangleCoup.x = rectanglePerso1.x + rectanglePerso1.w;// permet de commencer le rectangle coup sur la partie droite du rectangle
@@ -652,7 +642,7 @@ void jeu(int* pjouer)
 
         }
 
-        if ((coup == 6) && (saut == 0))   // retour coup de pied bas
+        if ((coup == 6) && (saut == 0))   // retour coup de point bas
         {
             if (rectangleCoup.w <= 0)
             {
@@ -690,7 +680,7 @@ void jeu(int* pjouer)
 
 
         }
-        if ((coupPied == 2) && (saut == 0))   // retour coup de point gauche
+        if ((coupPied == 2) && (saut == 0))   // retour coup de pied
         {
             rectangleCoup.w -= 4;
             if (rectangleCoup.w <= 0)
