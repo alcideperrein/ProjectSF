@@ -347,22 +347,40 @@ void jeu(int* pjouer)
     SDL_Event evenement;
     SDL_Color color_timer = { 0, 0, 0 };
 
-    int minuteur = 180; // 3 minutes en secondes
-    int jeu = 0;
-    int saut = 0;
-    int snick = 0;
-    int coup = 0;
-    int coupPied = 0;
-    int strikeSpeed = 0;
-    int compteur = 0;
-    int avancer = 0;
-    int compteurAvancer = 0;
-    int compteurSaut = 0;
-    int side = 1;
-    int degat = 0;
-    int etape = 0;
-    int compteurWin = 0;
+    int minuteur ; 
+    int jeu ;
+    int saut ;
+    int snick;
+    int coup ;
+    int coupPied ;
+    int strikeSpeed ;
+    int compteur ;
+    int avancer ;
+    int compteurAvancer ;
+    int compteurSaut ;
+    int side ;
+    int degat ;
+    int etape ;
+    int compteurWin ;
     char timer_text[20];
+
+
+
+    minuteur = 180; // 3 minutes en secondes
+    jeu = 0;
+    saut = 0;
+    snick = 0;
+    coup = 0;
+    coupPied = 0;
+    strikeSpeed = 0;
+    compteur = 0;
+    avancer = 0;
+    compteurAvancer = 0;
+    compteurSaut = 0;
+    side = 1;
+    degat = 0;
+    etape = 0;
+    compteurWin = 0;
 
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER);
     SDL_version nb;
@@ -755,7 +773,8 @@ void jeu(int* pjouer)
 
 int main(int argc, char** argv)
 {
-    int jouer = 0;
+    int jouer ;
+    jouer = 0;
     while (jouer == 0)   // permet de pouvoir recommencer le jeu tant que jouer == 0
     {
         jeu(&jouer);
