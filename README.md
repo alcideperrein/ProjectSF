@@ -1,3 +1,2 @@
-# ProjectSF
+# Street Fighter like game project
 
-Hi computer science student 
